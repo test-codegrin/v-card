@@ -58,7 +58,7 @@ export const signupSchema = loginSchema
 const servicesSchema = z
   .array(
     z.object({
-      title: z.string().min(1, 'Service title is required'),
+      name: z.string().min(1, 'Service name is required'),
       description: optionalString()
     })
   )
@@ -67,7 +67,7 @@ const servicesSchema = z
 const productsSchema = z
   .array(
     z.object({
-      title: z.string().min(1, 'Product title is required'),
+      name: z.string().min(1, 'Product name is required'),
       link: optionalUrl()
     })
   )
@@ -79,37 +79,51 @@ export const personalCardSchema = z.object({
   fullName: z.string().min(1, 'Full name is required'),
   email: z.string().email('Please use a valid email'),
   phone: phoneField,
+  role: optionalString(), // backward compat with existing field name
   jobTitle: optionalString(),
   company: optionalString(),
+  businessName: optionalString(), // tolerated for shared defaults
+  tagline: optionalString(), // tolerated for shared defaults
   website: optionalUrl(),
   location: optionalString(),
+  address: optionalString(), // backward compat with existing field name
   bio: z
     .string()
     .max(200, 'Keep bio under 200 characters')
     .optional()
     .or(z.literal('')),
+  services: servicesSchema,
+  products: productsSchema,
   social: z
     .object({
       linkedin: optionalUrl(),
       instagram: optionalUrl(),
       twitter: optionalUrl(),
       youtube: optionalUrl(),
-      github: optionalUrl()
+      github: optionalUrl(),
+      facebook: optionalUrl()
     })
     .partial()
     .optional(),
-  profilePhoto: optionalImage()
+  socials: z.any().optional(), // backward compat with existing field name
+  profilePhoto: optionalImage(),
+  profileImage: optionalImage(), // backward compat with existing field name
+  logo: optionalImage() // tolerated in defaults
 });
 
 // Business card validation
 export const businessCardSchema = z.object({
   cardType: z.literal('business'),
   businessName: z.string().min(1, 'Business name is required'),
+  fullName: optionalString(),
   email: z.string().email('Please use a valid email'),
   phone: phoneField,
+  role: optionalString(), // backward compat if provided
+  company: optionalString(),
   tagline: optionalString(),
   website: optionalUrl(),
   address: optionalString(),
+  bio: optionalString(),
   services: servicesSchema,
   products: productsSchema,
   social: z
@@ -121,7 +135,8 @@ export const businessCardSchema = z.object({
     })
     .partial()
     .optional(),
-  logo: optionalImage()
+  logo: optionalImage(),
+  profileImage: optionalImage() // backward compat
 });
 
 // Discriminated union used both client+server for create
@@ -130,6 +145,7 @@ export const cardCreateSchema = z.discriminatedUnion('cardType', [personalCardSc
 // Update schema: all fields optional; cardType optional string enum (no discriminator to avoid undefined conflicts).
 export const cardUpdateSchema = z.object({
   cardType: z.enum(['personal', 'business']).optional(),
+  ownerEmail: z.string().email('Please use a valid email').optional(),
   fullName: optionalString(),
   businessName: optionalString(),
   email: z.string().email('Please use a valid email').optional(),

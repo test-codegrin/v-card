@@ -3,6 +3,8 @@ import { z } from 'zod';
 import bcrypt from 'bcrypt';
 import { query } from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
 // Expected shape of signup payload
 const signupSchema = z.object({
   name: z.string().min(2, 'Name is required'),

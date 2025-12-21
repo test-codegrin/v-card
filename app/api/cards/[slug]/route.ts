@@ -5,6 +5,9 @@ import { query } from '@/lib/db';
 import { Card } from '@/types/card';
 import { cardUpdateSchema } from '@/lib/validators';
 
+// Avoid static optimization
+export const dynamic = 'force-dynamic';
+
 const selectBase = `
   SELECT slug, cardType, ownerEmail, fullName, role, company, businessName, tagline,
          email, phone, website, address, bio,

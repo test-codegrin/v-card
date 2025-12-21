@@ -26,7 +26,7 @@ const defaultValues: CardFormValues = {
   bio: '',
   services: [],
   products: [],
-  socials: {
+  social: {
     linkedin: '',
     instagram: '',
     youtube: '',
@@ -61,6 +61,7 @@ export default function NewCardPage() {
 
   const values = watch();
   const cardType = useWatch({ control, name: 'cardType' });
+  const err = errors as any;
 
   const {
     fields: serviceFields,
@@ -99,12 +100,12 @@ export default function NewCardPage() {
         setValue('products', card.products?.length ? card.products : []);
         setValue('profileImage', card.profileImage || '');
         setValue('logo', card.logo || '');
-        setValue('socials.linkedin', card.socials?.linkedin || '');
-        setValue('socials.instagram', card.socials?.instagram || '');
-        setValue('socials.youtube', card.socials?.youtube || '');
-        setValue('socials.github', card.socials?.github || '');
-        setValue('socials.twitter', card.socials?.twitter || '');
-        setValue('socials.facebook', card.socials?.facebook || '');
+        setValue('social.linkedin', (card as any).social?.linkedin || (card as any).socials?.linkedin || '');
+        setValue('social.instagram', (card as any).social?.instagram || (card as any).socials?.instagram || '');
+        setValue('social.youtube', (card as any).social?.youtube || (card as any).socials?.youtube || '');
+        setValue('social.github', (card as any).social?.github || (card as any).socials?.github || '');
+        setValue('social.twitter', (card as any).social?.twitter || (card as any).socials?.twitter || '');
+        setValue('social.facebook', (card as any).social?.facebook || (card as any).socials?.facebook || '');
       }
     })();
   }, [getCard, prefillSlug, setValue]);
@@ -131,17 +132,17 @@ export default function NewCardPage() {
 
   const onSubmit = async (formValues: CardFormValues) => {
     if (!authUser?.email) return;
+    const social = (formValues as any).social || {};
     const card = await createCard({
-      cardType: formValues.cardType,
       ownerEmail: authUser.email,
       ...formValues,
       socials: {
-        linkedin: formValues.socials?.linkedin || undefined,
-        instagram: formValues.socials?.instagram || undefined,
-        youtube: formValues.socials?.youtube || undefined,
-        github: formValues.socials?.github || undefined,
-        twitter: formValues.socials?.twitter || undefined,
-        facebook: formValues.socials?.facebook || undefined
+        linkedin: social.linkedin || undefined,
+        instagram: social.instagram || undefined,
+        youtube: social.youtube || undefined,
+        github: social.github || undefined,
+        twitter: social.twitter || undefined,
+        facebook: social.facebook || undefined
       }
     });
     await fetchCards();
@@ -176,37 +177,37 @@ export default function NewCardPage() {
 
             {cardType === 'personal' ? (
               <>
-                <Input label="Full Name" placeholder="Alex Doe" error={errors.fullName?.message} {...register('fullName')} />
-                <Input label="Job Title" placeholder="Product Designer" error={errors.role?.message} {...register('role')} />
-                <Input label="Company" placeholder="Acme Inc" error={errors.company?.message} {...register('company')} />
+                <Input label="Full Name" placeholder="Alex Doe" error={err.fullName?.message} {...register('fullName')} />
+                <Input label="Job Title" placeholder="Product Designer" error={err.role?.message} {...register('role')} />
+                <Input label="Company" placeholder="Acme Inc" error={err.company?.message} {...register('company')} />
               </>
             ) : (
               <>
                 <Input
                   label="Business Name"
                   placeholder="Acme Studio"
-                  error={errors.businessName?.message}
+                  error={err.businessName?.message}
                   {...register('businessName')}
                 />
                 <Input
                   label="Business Tagline / About"
                   placeholder="We build great products"
-                  error={errors.tagline?.message}
+                  error={err.tagline?.message}
                   {...register('tagline')}
                 />
               </>
             )}
 
-            <Input label="Email" placeholder="you@company.com" type="email" error={errors.email?.message} {...register('email')} />
-            <Input label="Phone" placeholder="+1 555 123 4567" error={errors.phone?.message} {...register('phone')} />
-            <Input label="Website" placeholder="https://example.com" error={errors.website?.message} {...register('website')} />
-            <Input label="Location / Address" placeholder="City, Country" error={errors.address?.message} {...register('address')} />
+            <Input label="Email" placeholder="you@company.com" type="email" error={err.email?.message} {...register('email')} />
+            <Input label="Phone" placeholder="+1 555 123 4567" error={err.phone?.message} {...register('phone')} />
+            <Input label="Website" placeholder="https://example.com" error={err.website?.message} {...register('website')} />
+            <Input label="Location / Address" placeholder="City, Country" error={err.address?.message} {...register('address')} />
             <TextArea
               label={cardType === 'business' ? 'About / Description' : 'Bio'}
               rows={3}
               maxLength={200}
               placeholder={cardType === 'business' ? 'What your business does' : 'Tell people what you do in under 200 characters.'}
-              error={errors.bio?.message}
+              error={err.bio?.message}
               {...register('bio')}
             />
 
@@ -216,26 +217,26 @@ export default function NewCardPage() {
                   <Input
                     label="Facebook"
                     placeholder="https://facebook.com/yourpage"
-                    error={errors.socials?.facebook?.message}
-                    {...register('socials.facebook')}
+                    error={err.social?.facebook?.message}
+                    {...register('social.facebook')}
                   />
                   <Input
                     label="LinkedIn"
                     placeholder="https://linkedin.com/company/you"
-                    error={errors.socials?.linkedin?.message}
-                    {...register('socials.linkedin')}
+                    error={err.social?.linkedin?.message}
+                    {...register('social.linkedin')}
                   />
                   <Input
                     label="Instagram"
                     placeholder="https://instagram.com/you"
-                    error={errors.socials?.instagram?.message}
-                    {...register('socials.instagram')}
+                    error={err.social?.instagram?.message}
+                    {...register('social.instagram')}
                   />
                   <Input
                     label="YouTube"
                     placeholder="https://youtube.com/@you"
-                    error={errors.socials?.youtube?.message}
-                    {...register('socials.youtube')}
+                    error={err.social?.youtube?.message}
+                    {...register('social.youtube')}
                   />
                 </>
               ) : (
@@ -243,32 +244,32 @@ export default function NewCardPage() {
                   <Input
                     label="LinkedIn"
                     placeholder="https://linkedin.com/in/you"
-                    error={errors.socials?.linkedin?.message}
-                    {...register('socials.linkedin')}
+                    error={err.social?.linkedin?.message}
+                    {...register('social.linkedin')}
                   />
                   <Input
                     label="Instagram"
                     placeholder="https://instagram.com/you"
-                    error={errors.socials?.instagram?.message}
-                    {...register('socials.instagram')}
+                    error={err.social?.instagram?.message}
+                    {...register('social.instagram')}
                   />
                   <Input
                     label="YouTube"
                     placeholder="https://youtube.com/@you"
-                    error={errors.socials?.youtube?.message}
-                    {...register('socials.youtube')}
+                    error={err.social?.youtube?.message}
+                    {...register('social.youtube')}
                   />
                   <Input
                     label="Twitter"
                     placeholder="https://twitter.com/you"
-                    error={errors.socials?.twitter?.message}
-                    {...register('socials.twitter')}
+                    error={err.social?.twitter?.message}
+                    {...register('social.twitter')}
                   />
                   <Input
                     label="GitHub"
                     placeholder="https://github.com/you"
-                    error={errors.socials?.github?.message}
-                    {...register('socials.github')}
+                    error={err.social?.github?.message}
+                    {...register('social.github')}
                   />
                 </>
               )}
@@ -290,12 +291,12 @@ export default function NewCardPage() {
                     <div key={field.id} className="grid gap-2 rounded-lg border border-gray-100 p-3 sm:grid-cols-2">
                       <Input
                         label="Service name"
-                        error={errors.services?.[index]?.name?.message}
+                        error={err.services?.[index]?.name?.message}
                         {...register(`services.${index}.name` as const)}
                       />
                       <Input
                         label="Short description"
-                        error={errors.services?.[index]?.description?.message}
+                        error={err.services?.[index]?.description?.message}
                         {...register(`services.${index}.description` as const)}
                       />
                       <div className="sm:col-span-2 flex justify-end">
@@ -325,13 +326,13 @@ export default function NewCardPage() {
                     <div key={field.id} className="grid gap-2 rounded-lg border border-gray-100 p-3 sm:grid-cols-2">
                       <Input
                         label="Product name"
-                        error={errors.products?.[index]?.name?.message}
+                        error={err.products?.[index]?.name?.message}
                         {...register(`products.${index}.name` as const)}
                       />
                       <Input
                         label="Product link"
                         placeholder="https://example.com/product"
-                        error={errors.products?.[index]?.link?.message}
+                        error={err.products?.[index]?.link?.message}
                         {...register(`products.${index}.link` as const)}
                       />
                       <div className="sm:col-span-2 flex justify-end">
@@ -380,7 +381,7 @@ export default function NewCardPage() {
               bio: values.bio,
               services: values.services,
               products: values.products,
-              socials: values.socials,
+              socials: values.social,
               profileImage: values.profileImage,
               logo: values.logo,
               slug: 'preview',

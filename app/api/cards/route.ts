@@ -6,6 +6,9 @@ import { Card } from '@/types/card';
 import { slugify } from '@/lib/utils';
 import { cardCreateSchema } from '@/lib/validators';
 
+// Mark dynamic to avoid static optimization conflicts.
+export const dynamic = 'force-dynamic';
+
 // Define create schema explicitly (avoids extending discriminated union)
 // Include ownerEmail + optional slug alongside the discriminated union
 const createPayloadSchema = z.discriminatedUnion('cardType', [
@@ -124,7 +127,7 @@ export async function POST(req: NextRequest) {
       parsed.bio || null,
       parsed.services ? JSON.stringify(parsed.services) : null,
       parsed.products ? JSON.stringify(parsed.products) : null,
-      parsed.socials ? JSON.stringify(parsed.socials) : null,
+      (parsed as any).social ? JSON.stringify((parsed as any).social) : (parsed as any).socials ? JSON.stringify((parsed as any).socials) : null,
       parsed.profileImage || null,
       parsed.logo || null,
       new Date()

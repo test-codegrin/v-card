@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { query } from '@/lib/db';
 
+// Ensure this route is treated as dynamic (never statically evaluated during build).
+export const dynamic = 'force-dynamic';
+
 type UserRow = { id: number; name: string; email: string };
 
 // GET /api/auth/me - returns current user if JWT is valid
