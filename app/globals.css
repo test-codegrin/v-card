@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% 20%, #111827 0, #0b0f19 40%), #0b0f19;
+  color: #e5e7eb;
+  font-family: var(--font-manrope), system-ui, -apple-system, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.card-surface {
+  background: #ffffff;
+  color: #0b0f19;
+  border-radius: 1rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}

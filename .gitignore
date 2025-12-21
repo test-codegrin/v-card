@@ -1,0 +1,25 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Testing
+coverage
+
+# Production
+.next
+out
+.env
+.env.example
+# Misc
+.DS_Store
+*.log
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+dist
