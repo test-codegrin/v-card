@@ -1,6 +1,6 @@
 'use client';
 
-import CardPreview from '@/components/cards/CardPreview';
+import CardPreview from '@/components/ui/CardPreview';
 import Button from '@/components/ui/Button';
 import { useCardStore } from '@/store/cardStore';
 import { useRouter } from 'next/navigation';
@@ -43,7 +43,7 @@ export default function ShareClient({ slug }: Props) {
 
   if (!card) {
     return (
-      <div className="glass-panel space-y-4 rounded-2xl p-6 text-white">
+      <div className="glass space-y-4 rounded-2xl p-6 text-white">
         <h1 className="text-2xl font-semibold">Card not found</h1>
         <p className="text-white/70">This card is not available.</p>
         <Button variant="ghost" onClick={() => router.push('/')}>
@@ -55,13 +55,14 @@ export default function ShareClient({ slug }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="text-center">
-        <p className="text-sm uppercase tracking-[0.2em] text-primary">Digital card</p>
-        <h1 className="text-3xl font-semibold text-white">
+      <div className="text-center space-y-2">
+        <p className="caption">Digital card</p>
+        <h1 className="heading-2">
           {card.cardType === 'business' ? card.businessName || 'Business Card' : card.fullName}
         </h1>
+        <p className="text-xs uppercase tracking-wide text-white/60">Template: {card.template || 'modern'}</p>
       </div>
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 text-black shadow-soft">
+      <div className="glass p-6">
         <CardPreview card={card} />
       </div>
       <div className="flex flex-wrap items-center justify-center gap-3">

@@ -4,12 +4,14 @@ export type ContactLink = {
 };
 
 export type CardType = 'personal' | 'business';
+export type CardTemplate = 'modern' | 'classic' | 'creative';
 
 export type Service = { name: string; description?: string };
 export type Product = { name: string; link?: string };
 
 export type Card = {
   cardType: CardType;
+  template?: CardTemplate;
   slug: string;
   ownerEmail: string;
   // Personal

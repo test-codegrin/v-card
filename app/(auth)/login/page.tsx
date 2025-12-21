@@ -42,31 +42,43 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="mx-auto max-w-xl space-y-6 rounded-2xl bg-white p-10 text-black shadow-soft">
-      <div className="space-y-2">
-        <p className="text-sm uppercase tracking-wide text-primary">Welcome back</p>
-        <h1 className="text-3xl font-semibold">Log in to your workspace</h1>
-        <p className="text-sm text-gray-600">Access your dashboard to create and share V-Cards.</p>
+    <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+      <div className="space-y-4">
+        <p className="caption">Welcome back</p>
+        <h1 className="heading-2">Sign in to your V-Card workspace.</h1>
+        <p className="text-sm text-white/70">Premium form styling with live validation keeps the auth flow feeling product-ready.</p>
+        <div className="flex flex-wrap gap-2">
+          <span className="ds-badge">Secure</span>
+          <span className="ds-badge">Instant access</span>
+        </div>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <Input label="Email" type="email" placeholder="you@company.com" error={errors.email?.message} {...register('email')} />
-        <Input
-          label="Password"
-          type="password"
-          placeholder="Minimum 8 characters"
-          error={errors.password?.message}
-          {...register('password')}
-        />
-        <Button type="submit" loading={isSubmitting} className="w-full">
-          Continue
-        </Button>
-      </form>
-      <p className="text-sm text-gray-600">
-        Don&apos;t have an account?{' '}
-        <Link className="text-primary underline" href="/signup">
-          Sign up
-        </Link>
-      </p>
+
+      <div className="panel space-y-6 p-8">
+        <div className="space-y-2">
+          <h2 className="text-2xl font-semibold text-white">Log in</h2>
+          <p className="text-sm text-white/70">Access your dashboard to create and share V-Cards.</p>
+        </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <Input tone="dark" label="Email" type="email" placeholder="you@company.com" error={errors.email?.message} {...register('email')} />
+          <Input
+            tone="dark"
+            label="Password"
+            type="password"
+            placeholder="Minimum 8 characters"
+            error={errors.password?.message}
+            {...register('password')}
+          />
+          <Button type="submit" loading={isSubmitting} className="w-full">
+            Continue
+          </Button>
+        </form>
+        <p className="text-sm text-white/70">
+          Don&apos;t have an account?{' '}
+          <Link className="text-primary underline" href="/signup">
+            Sign up
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

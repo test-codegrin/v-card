@@ -46,28 +46,33 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-8">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-sm uppercase tracking-[0.2em] text-primary">Dashboard</p>
-          <h1 className="text-3xl font-semibold text-white">Your V-Cards</h1>
+          <p className="caption">Dashboard</p>
+          <h1 className="heading-2">Your V-Cards</h1>
         </div>
-        <Link href="/cards/new">
-          <Button>Create New Card</Button>
-        </Link>
+        <div className="flex gap-3">
+          <Button variant="ghost" onClick={() => fetchCards()}>
+            Refresh
+          </Button>
+          <Link href="/cards/new">
+            <Button>Create New Card</Button>
+          </Link>
+        </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="panel flex flex-wrap items-center gap-3 p-4">
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by name or company"
-          className="w-full max-w-sm rounded-lg border border-white/10 bg-white/10 px-4 py-2 text-sm text-white placeholder:text-white/50 focus:border-primary focus:outline-none"
+          className="w-full max-w-md rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/50 focus:border-primary focus:outline-none"
         />
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value as 'newest' | 'oldest')}
-          className="rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-sm text-white focus:border-primary focus:outline-none"
+          className="rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-sm text-white focus:border-primary focus:outline-none"
         >
           <option value="newest">Newest first</option>
           <option value="oldest">Oldest first</option>
@@ -75,7 +80,7 @@ export default function DashboardPage() {
       </div>
 
       {filteredCards.length === 0 ? (
-        <div className="glass-panel flex flex-col items-start gap-3 rounded-2xl p-6 text-white/80">
+        <div className="glass flex flex-col items-start gap-3 p-6 text-white/80">
           <h2 className="text-xl font-semibold text-white">No cards yet</h2>
           <p>Create your first card to see it listed here.</p>
           <Link href="/cards/new">
@@ -83,32 +88,44 @@ export default function DashboardPage() {
           </Link>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {filteredCards.map((card) => (
-            <div key={card.slug} className="glass-panel rounded-2xl p-4 text-white">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <h3 className="text-xl font-semibold text-white">{card.fullName || card.businessName}</h3>
-                  <p className="text-sm text-white/60">
-                    {[card.role || card.tagline, card.company || card.businessName].filter(Boolean).join(' · ')}
+            <div
+              key={card.slug}
+              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 text-white shadow-card-hover transition hover:-translate-y-1"
+            >
+              <div className="flex items-start gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-lg font-bold text-primary">
+                  {(card.fullName || card.businessName || 'V')[0]?.toUpperCase()}
+                </div>
+                <div className="flex-1 space-y-1">
+                  <h3 className="text-lg font-semibold">{card.fullName || card.businessName}</h3>
+                  <p className="text-xs text-white/60">
+                    {[card.role || card.tagline, card.company || card.businessName].filter(Boolean).join(' • ')}
                   </p>
-                  <p className="text-xs text-white/50">Created {formatDate(card.createdAt)}</p>
+                  <p className="text-[11px] uppercase tracking-wide text-white/50">Created {formatDate(card.createdAt)}</p>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  <Link href={`/share/${card.slug}`}>
-                    <Button variant="secondary" size="sm">
-                      Share link
-                    </Button>
-                  </Link>
-                  <Link href={`/cards/${card.slug}`}>
-                    <Button variant="ghost" size="sm">
-                      Open
-                    </Button>
-                  </Link>
-                  <Button variant="ghost" size="sm" onClick={() => handleDelete(card.slug)}>
-                    Delete
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-white/70">
+                {card.email && <span className="rounded-lg bg-white/5 px-2 py-1">Email</span>}
+                {card.phone && <span className="rounded-lg bg-white/5 px-2 py-1">Phone</span>}
+                {card.website && <span className="rounded-lg bg-white/5 px-2 py-1">Website</span>}
+                <span className="rounded-lg bg-white/5 px-2 py-1 capitalize">{card.template || 'modern'} template</span>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Link href={`/share/${card.slug}`}>
+                  <Button variant="secondary" size="sm">
+                    Share
                   </Button>
-                </div>
+                </Link>
+                <Link href={`/cards/${card.slug}`}>
+                  <Button variant="ghost" size="sm">
+                    Open
+                  </Button>
+                </Link>
+                <Button variant="ghost" size="sm" onClick={() => handleDelete(card.slug)}>
+                  Delete
+                </Button>
               </div>
             </div>
           ))}

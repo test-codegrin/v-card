@@ -36,7 +36,7 @@ export default function CardDetailPage() {
 
   if (!card) {
     return (
-      <div className="glass-panel space-y-4 rounded-2xl p-6 text-white">
+      <div className="glass space-y-4 p-6 text-white">
         <h1 className="text-2xl font-semibold">Card not found</h1>
         <p className="text-white/70">Create a new card or go back to the dashboard.</p>
         <div className="flex gap-3">
@@ -79,13 +79,14 @@ export default function CardDetailPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-sm uppercase tracking-[0.2em] text-primary">Card</p>
-          <h1 className="text-3xl font-semibold text-white">
+          <p className="caption">Card</p>
+          <h1 className="heading-2">
             {card.cardType === 'business' ? card.businessName || 'Business Card' : card.fullName}
           </h1>
+          <p className="text-xs uppercase tracking-wide text-white/60">Template: {card.template || 'modern'}</p>
         </div>
         <div className="flex gap-2">
           <Button variant="ghost" onClick={() => router.push('/dashboard')}>
@@ -103,31 +104,31 @@ export default function CardDetailPage() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 text-black shadow-soft">
-        <div className="flex flex-col items-center gap-6">
+      <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="glass p-6">
           <CardPreview card={card} />
+        </div>
 
-          <div className="w-full max-w-xl space-y-3">
-            <div className="flex items-center justify-between gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
-              <div className="max-w-[70%]">
-                <p className="text-xs uppercase tracking-wide text-gray-500">Share URL</p>
-                <p className="break-all text-sm font-semibold text-black">{shareUrl}</p>
-              </div>
-              <Button variant="light" size="sm" onClick={handleCopy}>
-                {copied ? 'Copied' : 'Copy link'}
-              </Button>
+        <div className="panel space-y-4 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-wide text-white/60">Share URL</p>
+              <p className="break-all text-sm font-semibold text-white">{shareUrl}</p>
             </div>
+            <Button variant="light" size="sm" onClick={handleCopy}>
+              {copied ? 'Copied' : 'Copy link'}
+            </Button>
+          </div>
 
-            <div ref={qrContainerRef} className="flex flex-col items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 p-4">
-              <QRCodeCanvas value={shareUrl || '#'} size={180} fgColor="#0B0F19" bgColor="#FFFFFF" includeMargin />
-              <div className="flex gap-2">
-                <Button variant="light" size="sm" onClick={handleCopy}>
-                  Copy Link
-                </Button>
-                <Button variant="light" size="sm" onClick={handleDownload}>
-                  Download QR
-                </Button>
-              </div>
+          <div ref={qrContainerRef} className="flex flex-col items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+            <QRCodeCanvas value={shareUrl || '#'} size={180} fgColor="#FFFFFF" bgColor="transparent" includeMargin />
+            <div className="flex gap-2">
+              <Button variant="light" size="sm" onClick={handleCopy}>
+                Copy Link
+              </Button>
+              <Button variant="light" size="sm" onClick={handleDownload}>
+                Download QR
+              </Button>
             </div>
           </div>
         </div>

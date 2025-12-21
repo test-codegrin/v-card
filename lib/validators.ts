@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CardType } from '@/types/card';
+import { CardTemplate, CardType } from '@/types/card';
 
 // ----- Shared helpers -----
 // Converts empty strings to undefined so optional fields don’t fail validation.
@@ -73,9 +73,13 @@ const productsSchema = z
   )
   .optional();
 
+const templateOptions = ['modern', 'classic', 'creative'] as const satisfies readonly CardTemplate[];
+const templateSchema = z.enum(templateOptions).optional();
+
 // Personal card validation
 export const personalCardSchema = z.object({
   cardType: z.literal('personal'),
+  template: templateSchema,
   fullName: z.string().min(1, 'Full name is required'),
   email: z.string().email('Please use a valid email'),
   phone: phoneField,
@@ -114,6 +118,7 @@ export const personalCardSchema = z.object({
 // Business card validation
 export const businessCardSchema = z.object({
   cardType: z.literal('business'),
+  template: templateSchema,
   businessName: z.string().min(1, 'Business name is required'),
   fullName: optionalString(),
   email: z.string().email('Please use a valid email'),
@@ -145,6 +150,7 @@ export const cardCreateSchema = z.discriminatedUnion('cardType', [personalCardSc
 // Update schema: all fields optional; cardType optional string enum (no discriminator to avoid undefined conflicts).
 export const cardUpdateSchema = z.object({
   cardType: z.enum(['personal', 'business']).optional(),
+  template: templateSchema,
   ownerEmail: z.string().email('Please use a valid email').optional(),
   fullName: optionalString(),
   businessName: optionalString(),
