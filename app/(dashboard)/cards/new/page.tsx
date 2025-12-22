@@ -13,6 +13,7 @@ import TemplateSelector from '@/components/ui/TemplateSelector';
 import { cardCreateSchema, CardFormValues } from '@/lib/validators';
 import { useCardStore } from '@/store/cardStore';
 import { useAuthStore } from '@/store/authStore';
+import { useToast } from '@/components/ui/ToastProvider';
 
 const defaultValues: CardFormValues = {
   cardType: 'personal',
@@ -47,6 +48,7 @@ export default function NewCardPage() {
   const prefillSlug = searchParams.get('prefill');
   const { createCard, getCard, fetchCards } = useCardStore();
   const authUser = useAuthStore((state) => state.user);
+  const { showToast } = useToast();
   const hasPrefilled = useRef(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const {
@@ -61,6 +63,9 @@ export default function NewCardPage() {
     defaultValues,
     mode: 'onChange'
   });
+  const onSubmitError = (submitErrors: any) => {
+    console.warn('[NewCardPage] Submit blocked: validation errors', submitErrors);
+  };
 
   const values = watch();
   const cardType = useWatch({ control, name: 'cardType' });
@@ -136,22 +141,36 @@ export default function NewCardPage() {
   };
 
   const onSubmit = async (formValues: CardFormValues) => {
-    if (!authUser?.email) return;
-    const social = (formValues as any).social || {};
-    const card = await createCard({
-      ownerEmail: authUser.email,
-      ...formValues,
-      socials: {
-        linkedin: social.linkedin || undefined,
-        instagram: social.instagram || undefined,
-        youtube: social.youtube || undefined,
-        github: social.github || undefined,
-        twitter: social.twitter || undefined,
-        facebook: social.facebook || undefined
+    console.log('[NewCardPage] Submit handler started', { formValues });
+    try {
+      if (!authUser?.email) {
+        console.warn('[NewCardPage] Submit blocked: no auth user');
+        showToast({ variant: 'error', title: 'Not signed in', message: 'Please log in to save your card.' });
+        return;
       }
-    });
-    await fetchCards();
-    router.replace(`/cards/${card.slug}`);
+      const social = (formValues as any).social || {};
+      console.log('[NewCardPage] Creating card', { payload: { ...formValues, social } });
+      const card = await createCard({
+        ownerEmail: authUser.email,
+        ...formValues,
+        socials: {
+          linkedin: social.linkedin || undefined,
+          instagram: social.instagram || undefined,
+          youtube: social.youtube || undefined,
+          github: social.github || undefined,
+          twitter: social.twitter || undefined,
+          facebook: social.facebook || undefined
+        }
+      });
+      console.log('[NewCardPage] Card created', { slug: card.slug });
+      await fetchCards();
+      showToast({ variant: 'success', title: 'Saved', message: 'Your card has been saved.' });
+      router.replace(`/cards/${card.slug}`);
+    } catch (error: any) {
+      console.error('[NewCardPage] Submit failed', error);
+      const message = error?.message || 'Could not save card. Please check your fields and try again.';
+      showToast({ variant: 'error', title: 'Save failed', message });
+    }
   };
 
   return (
@@ -170,7 +189,7 @@ export default function NewCardPage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <form onSubmit={handleSubmit(onSubmit)} className="panel space-y-6 p-6">
+        <form onSubmit={handleSubmit(onSubmit, onSubmitError)} className="panel space-y-6 p-6">
           <div className="grid gap-4 lg:grid-cols-2">
             <div className="space-y-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-white/70">Card Type</p>
@@ -183,7 +202,7 @@ export default function NewCardPage() {
                       ? 'border-primary/60 bg-primary/10 text-white shadow-card-hover'
                       : 'border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:text-white'
                   )}
-                  onClick={() => setValue('cardType', 'personal', { shouldDirty: true, shouldValidate: true })}
+                  onClick={() => setValue('cardType', 'personal', { shouldDirty: true, shouldValidate: true, shouldTouch: true })}
                 >
                   Personal
                 </button>
@@ -195,18 +214,19 @@ export default function NewCardPage() {
                       ? 'border-primary/60 bg-primary/10 text-white shadow-card-hover'
                       : 'border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:text-white'
                   )}
-                  onClick={() => setValue('cardType', 'business', { shouldDirty: true, shouldValidate: true })}
+                  onClick={() => setValue('cardType', 'business', { shouldDirty: true, shouldValidate: true, shouldTouch: true })}
                 >
                   Business
                 </button>
               </div>
-              <input type="hidden" value={cardType} {...register('cardType')} />
+              {/* Hidden registrations keep react-hook-form aware of programmatic changes */}
+              <input type="hidden" {...register('cardType')} value={cardType} />
             </div>
 
             <div className="space-y-2">
               <p className="text-xs font-semibold uppercase tracking-wide text-white/70">Template</p>
               <TemplateSelector value={(template as any) || 'modern'} onChange={(next) => setValue('template', next, { shouldDirty: true })} />
-              <input type="hidden" value={template} {...register('template')} />
+              <input type="hidden" {...register('template')} value={template} />
             </div>
           </div>
 
@@ -410,7 +430,7 @@ export default function NewCardPage() {
           </div>
 
           <div className="flex justify-end">
-            <Button type="submit" loading={isSubmitting}>
+            <Button type="submit" loading={isSubmitting} onClick={() => console.log('[NewCardPage] Save button clicked')}>
               Save Card
             </Button>
           </div>

@@ -11,19 +11,28 @@ const optionalUrl = () =>
 
 // Allow either URL or data URL for images.
 const optionalImage = () =>
-  z
-    .preprocess((val) => (typeof val === 'string' && val.trim() === '' ? undefined : val), z.string())
-    .optional()
-    .refine(
-      (val) => !val || /^data:image\/[a-zA-Z]+;base64,/.test(val) || /^https?:\/\/.+/i.test(val),
-      'Provide a valid image URL or base64 data URL'
-    );
+  z.preprocess((val) => {
+    if (val === null || val === undefined) return undefined;
+    if (typeof val === 'string' && val.trim() === '') return undefined;
+    return val;
+  }, z.union([
+    z
+      .string()
+      .refine(
+        (v) => /^data:image\/[a-zA-Z]+;base64,/.test(v) || /^https?:\/\/.+/i.test(v),
+        'Provide a valid image URL or base64 data URL'
+      ),
+    z.undefined()
+  ]));
 
 // Shared phone rule: optional, but must be valid if present.
-const phoneField = z
-  .string()
-  .regex(/^[+\d][\d\s-]{6,}$/, 'Use a valid phone number')
-  .optional();
+const phoneField = z.preprocess(
+  (val) => (typeof val === 'string' && val.trim() === '' ? undefined : val),
+  z
+    .string()
+    .regex(/^[+\d][\d\s-]{6,}$/, 'Use a valid phone number')
+    .optional()
+);
 
 // ----- Auth schemas -----
 export const loginSchema = z.object({
