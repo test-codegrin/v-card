@@ -24,7 +24,7 @@ export default function TemplateSelector({ value, onChange }: TemplateSelectorPr
           type="button"
           onClick={() => onChange(template.id)}
           className={clsx(
-            'group relative overflow-hidden rounded-2xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-secondary',
+            'group relative overflow-hidden rounded-2xl border px-3 py-5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-secondary',
             value === template.id
               ? 'border-primary/70 bg-primary/5 shadow-card-hover'
               : 'border-white/10 bg-white/5 hover:-translate-y-[1px] hover:border-white/20'
@@ -34,7 +34,7 @@ export default function TemplateSelector({ value, onChange }: TemplateSelectorPr
           <div className="relative space-y-2">
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold text-white">{template.name}</p>
-              {value === template.id && <span className="rounded-full bg-primary/20 px-2 py-1 text-[11px] font-semibold text-primary">Active</span>}
+              {value === template.id && <span className="rounded-full bg-primary/20 px-1 py-1 text-[11px] font-semibold text-primary">Active</span>}
             </div>
             <p className="text-xs text-white/70">{template.description}</p>
           </div>

@@ -190,7 +190,7 @@ export default function NewCardPage() {
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <form onSubmit={handleSubmit(onSubmit, onSubmitError)} className="panel space-y-6 p-6">
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
             <div className="space-y-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-white/70">Card Type</p>
               <div className="flex gap-3">

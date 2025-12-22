@@ -12,7 +12,7 @@ export default function AppLayout({ children }: Props) {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="flex-1 bg-hero-radial">
-        <div className="container mx-auto w-full max-w-6xl px-6 py-10 lg:max-w-7xl">{children}</div>
+        <div className="container w-full max-w-8xl px-13 py-10 lg:max-w-8xl">{children}</div>
       </main>
       <Footer />
     </div>
