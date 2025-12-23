@@ -88,7 +88,8 @@ const templateSchema = z.enum(templateOptions).optional();
 // Personal card validation
 export const personalCardSchema = z.object({
   cardType: z.literal('personal'),
-  template: templateSchema,
+  template: z.enum(['classic', 'modern', 'creative']),
+
   fullName: z.string().min(1, 'Full name is required'),
   email: z.string().email('Please use a valid email'),
   phone: phoneField,

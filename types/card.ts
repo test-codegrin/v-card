@@ -11,7 +11,7 @@ export type Product = { name: string; link?: string };
 
 export type Card = {
   cardType: CardType;
-  template?: CardTemplate;
+  template: CardTemplate;
   slug: string;
   ownerEmail: string;
   // Personal

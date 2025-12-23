@@ -23,7 +23,7 @@ const createPayloadSchema = z.discriminatedUnion('cardType', [
 ]);
 
 const selectBase = `
-  SELECT slug, cardType, ownerEmail, fullName, role, company, businessName, tagline,
+  SELECT slug, cardType, ownerEmail, template,fullName, role, company, businessName, tagline,
          email, phone, website, address, bio,
          services, products, socials, profileImage, logo, createdAt
   FROM cards
@@ -42,6 +42,7 @@ const mapRowToCard = (row: any): Card => ({
   cardType: row.cardType,
   slug: row.slug,
   ownerEmail: row.ownerEmail,
+   template: row.template ,
   fullName: row.fullName || undefined,
   role: row.role || undefined,
   company: row.company || undefined,
@@ -107,14 +108,15 @@ export async function POST(req: NextRequest) {
 
     const sql = `
       INSERT INTO cards
-      (slug, cardType, ownerEmail, fullName, role, company, businessName, tagline, email, phone, website, address, bio, services, products, socials, profileImage, logo, createdAt)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (slug, cardType, ownerEmail, template ,fullName, role, company, businessName, tagline, email, phone, website, address, bio, services, products, socials, profileImage, logo, createdAt)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
     `;
 
     const payload = [
       slug,
       parsed.cardType,
       parsed.ownerEmail,
+      parsed.template ,
       parsed.fullName || null,
       parsed.role || null,
       parsed.company || null,
@@ -135,7 +137,15 @@ export async function POST(req: NextRequest) {
 
     await query(sql, payload);
 
-    return NextResponse.json({ ...parsed, slug, createdAt: new Date().toISOString() }, { status: 201 });
+ return NextResponse.json(
+  {
+    ...parsed,
+    socials: (parsed as any).social ?? (parsed as any).socials ?? {},
+    slug,
+    createdAt: new Date().toISOString()
+  },
+  { status: 201 }
+);
   } catch (error) {
     console.error('POST /api/cards failed', error);
     if (error instanceof z.ZodError) {

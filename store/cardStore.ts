@@ -80,24 +80,20 @@ export const useCardStore = create<CardState>((set, get) => ({
   },
 
   // If opts.public is true, do not send auth header.
-  getCard: async (slug, opts) => {
-    const token = opts?.public ? null : useAuthStore.getState().token;
-    set({ loading: true, error: null });
-    try {
-      const card = await getCardBySlug(slug, token);
-      if (!opts?.public) {
-        set((state) => {
-          const exists = state.cards.some((c) => c.slug === card.slug);
-          return { cards: exists ? state.cards.map((c) => (c.slug === card.slug ? card : c)) : [card, ...state.cards], loading: false };
-        });
-      } else {
-        set({ loading: false });
-      }
-      return card;
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to fetch card';
-      set({ error: message, loading: false });
-      return null;
-    }
+getCard: async (slug, opts) => {
+  const token = opts?.public ? null : useAuthStore.getState().token;
+  set({ loading: true, error: null });
+
+  try {
+    const card = await getCardBySlug(slug, token);
+    set({ loading: false });
+    return card;
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Failed to fetch card';
+    set({ error: message, loading: false });
+    return null;
   }
+}
+
 }));

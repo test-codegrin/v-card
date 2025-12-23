@@ -90,44 +90,73 @@ export default function DashboardPage() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {filteredCards.map((card) => (
-            <div
-              key={card.slug}
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 text-white shadow-card-hover transition hover:-translate-y-1"
-            >
-              <div className="flex items-start gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-lg font-bold text-primary">
-                  {(card.fullName || card.businessName || 'V')[0]?.toUpperCase()}
-                </div>
-                <div className="flex-1 space-y-1">
-                  <h3 className="text-lg font-semibold">{card.fullName || card.businessName}</h3>
-                  <p className="text-xs text-white/60">
-                    {[card.role || card.tagline, card.company || card.businessName].filter(Boolean).join(' • ')}
-                  </p>
-                  <p className="text-[11px] uppercase tracking-wide text-white/50">Created {formatDate(card.createdAt)}</p>
-                </div>
-              </div>
-              <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-white/70">
-                {card.email && <span className="rounded-lg bg-white/5 px-2 py-1">Email</span>}
-                {card.phone && <span className="rounded-lg bg-white/5 px-2 py-1">Phone</span>}
-                {card.website && <span className="rounded-lg bg-white/5 px-2 py-1">Website</span>}
-                <span className="rounded-lg bg-white/5 px-2 py-1 capitalize">{card.template || 'modern'} template</span>
-              </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Link href={`/share/${card.slug}`}>
-                  <Button variant="secondary" size="sm">
-                    Share
-                  </Button>
-                </Link>
-                <Link href={`/cards/${card.slug}`}>
-                  <Button variant="ghost" size="sm">
-                    Open
-                  </Button>
-                </Link>
-                <Button variant="ghost" size="sm" onClick={() => handleDelete(card.slug)}>
-                  Delete
-                </Button>
-              </div>
-            </div>
+            <Link
+  key={card.slug}
+  href={`/cards/${encodeURIComponent(card.slug)}`}
+  className="group relative block overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 text-white shadow-card-hover transition hover:-translate-y-1"
+>
+  <div className="flex items-start gap-3">
+    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-lg font-bold text-primary">
+      {(card.fullName || card.businessName || 'V')[0]?.toUpperCase()}
+    </div>
+
+    <div className="flex-1 space-y-1">
+      <h3 className="text-lg font-semibold">
+        {card.fullName || card.businessName}
+      </h3>
+
+      <p className="text-xs text-white/60">
+        {[card.role || card.tagline, card.company || card.businessName]
+          .filter(Boolean)
+          .join(' • ')}
+      </p>
+
+      <p className="text-[11px] uppercase tracking-wide text-white/50">
+        Created {formatDate(card.createdAt)}
+      </p>
+    </div>
+  </div>
+
+  <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-white/70">
+    {card.email && <span className="rounded-lg bg-white/5 px-2 py-1">Email</span>}
+    {card.phone && <span className="rounded-lg bg-white/5 px-2 py-1">Phone</span>}
+    {card.website && <span className="rounded-lg bg-white/5 px-2 py-1">Website</span>}
+    <span className="rounded-lg bg-white/5 px-2 py-1 capitalize">
+      {card.template || 'modern'} template
+    </span>
+  </div>
+
+  <div className="mt-4 flex flex-wrap gap-2">
+    <Link href={`/share/${card.slug}`} onClick={(e) => e.stopPropagation()}>
+      <Button variant="secondary" size="sm">
+        Share
+      </Button>
+    </Link>
+
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      Open
+    </Button>
+
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={(e) => {
+        e.stopPropagation();
+        handleDelete(card.slug);
+      }}
+    >
+      Delete
+    </Button>
+  </div>
+</Link>
+
+            
           ))}
         </div>
       )}
