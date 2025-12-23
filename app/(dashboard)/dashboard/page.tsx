@@ -18,23 +18,42 @@ export default function DashboardPage() {
     if (user) fetchCards();
   }, [fetchCards, user]);
 
-  const filteredCards = useMemo(() => {
-    const ownerEmail = user?.email;
-    if (!ownerEmail) return [];
-    const query = search.toLowerCase();
-    return cards
-      .filter((card) => card.ownerEmail === ownerEmail)
-      .filter((card) => {
-        const name = (card.fullName || card.businessName || '').toLowerCase();
-        const company = (card.company || card.businessName || '').toLowerCase();
-        return name.includes(query) || company.includes(query);
-      })
-      .sort((a, b) =>
-        sort === 'newest'
-          ? new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          : new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      );
-  }, [cards, search, sort, user?.email]);
+ const filteredCards = useMemo(() => {
+  const ownerEmail = user?.email;
+  if (!ownerEmail) return [];
+
+  const query = search.trim().toLowerCase();
+
+  return cards
+    .filter((card) => card.ownerEmail === ownerEmail)
+    .filter((card) => {
+      if (!query) return true;
+
+      const searchableText = [
+        card.fullName,
+        card.businessName,
+        card.company,
+        card.role,
+        card.tagline,
+        card.email,
+        card.phone,
+        card.website,
+        card.address,
+        card.template
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      return searchableText.includes(query);
+    })
+    .sort((a, b) =>
+      sort === 'newest'
+        ? new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        : new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+}, [cards, search, sort, user?.email]);
+
 
   const handleDelete = async (slug: string) => {
     if (!window.confirm('Delete this card?')) return;
@@ -72,7 +91,7 @@ export default function DashboardPage() {
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value as 'newest' | 'oldest')}
-          className="rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-sm text-white focus:border-primary focus:outline-none"
+          className="rounded-xl border border-white/10 bg-black/50 px-3 py-3 text-sm text-white focus:border-primary focus:outline-none"
         >
           <option value="newest">Newest first</option>
           <option value="oldest">Oldest first</option>
@@ -96,9 +115,17 @@ export default function DashboardPage() {
   className="group relative block overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 text-white shadow-card-hover transition hover:-translate-y-1"
 >
   <div className="flex items-start gap-3">
-    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-lg font-bold text-primary">
-      {(card.fullName || card.businessName || 'V')[0]?.toUpperCase()}
-    </div>
+    <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-primary/15 text-lg font-bold text-primary">
+  {card.profileImage || card.logo ? (
+    <img
+      src={card.profileImage || card.logo}
+      alt={card.fullName || card.businessName || 'V'}
+      className="h-full w-full object-cover"
+    />
+  ) : (
+    (card.fullName || card.businessName || 'V')[0]?.toUpperCase()
+  )}
+</div>
 
     <div className="flex-1 space-y-1">
       <h3 className="text-lg font-semibold">
@@ -117,10 +144,10 @@ export default function DashboardPage() {
     </div>
   </div>
 
-  <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-white/70">
-    {card.email && <span className="rounded-lg bg-white/5 px-2 py-1">Email</span>}
-    {card.phone && <span className="rounded-lg bg-white/5 px-2 py-1">Phone</span>}
-    {card.website && <span className="rounded-lg bg-white/5 px-2 py-1">Website</span>}
+  <div className="mt-4 grid lg:grid-cols-2  gap-2 text-xs text-white/70">
+    {card.email && <span className="rounded-lg bg-white/5 px-2 py-1">{card.email}</span>}
+    {card.phone && <span className="rounded-lg bg-white/5 px-2 py-1">{card.phone}</span>}
+    {card.website && <span className="rounded-lg bg-white/5 px-2 py-1">{card.website}</span>}
     <span className="rounded-lg bg-white/5 px-2 py-1 capitalize">
       {card.template || 'modern'} template
     </span>
