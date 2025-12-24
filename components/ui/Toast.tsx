@@ -11,34 +11,67 @@ type ToastProps = {
   onDismiss?: () => void;
 };
 
+/* -------------------------------------------
+   WINE THEME TOAST STYLES
+------------------------------------------- */
 const variantStyles: Record<ToastVariant, string> = {
-  success: 'border-green-300/60 bg-green-50/95 text-green-900',
-  error: 'border-red-300/70 bg-red-50/95 text-red-900',
-  info: 'border-white/20 bg-white/10 text-white'
+  success:
+    'border-[#9f2b34]/40 bg-[#9f2b34]/10 text-[#7a1f27]',
+  error:
+    'border-[#7a1f27]/60 bg-[#7a1f27]/15 text-[#5a141b]',
+  info:
+    'border-[#9f2b34]/30 bg-[#9f2b34]/08 text-[#9f2b34]'
 };
 
-// Reusable toast surface so both the provider and future pages share the same visual language.
-export function Toast({ title, message, variant = 'info', onDismiss }: ToastProps) {
+// Reusable toast surface aligned with wine theme
+export function Toast({
+  title,
+  message,
+  variant = 'info',
+  onDismiss
+}: ToastProps) {
   return (
     <div
       className={clsx(
-        'relative overflow-hidden rounded-xl border px-4 py-3 shadow-card-hover backdrop-blur',
+        'relative overflow-hidden rounded-xl border px-4 py-3',
+        'shadow-[0_10px_30px_-12px_rgba(159,43,52,0.35)]',
+        'backdrop-blur-md',
         variantStyles[variant]
       )}
       role="status"
       aria-live="polite"
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/0 to-white/5 opacity-70" />
+      {/* subtle glass highlight */}
+      <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-white/10 opacity-60" />
+
       <div className="relative flex items-start gap-3">
-        <div className="mt-1 h-2 w-2 rounded-full bg-current" aria-hidden />
+        {/* indicator dot */}
+        <div
+          className="mt-1 h-2.5 w-2.5 rounded-full bg-current"
+          aria-hidden
+        />
+
         <div className="flex-1">
-          {title && <p className="text-sm font-semibold">{title}</p>}
-          <p className="text-sm leading-relaxed">{message}</p>
+          {title && (
+            <p className="text-sm font-semibold leading-none">
+              {title}
+            </p>
+          )}
+          <p className="mt-0.5 text-sm leading-relaxed">
+            {message}
+          </p>
         </div>
+
         {onDismiss && (
           <button
             onClick={onDismiss}
-            className="text-xs font-semibold text-current transition hover:scale-105 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-current focus-visible:ring-offset-2 focus-visible:ring-offset-secondary"
+            className="text-xs font-semibold text-current transition
+              hover:scale-110
+              focus-visible:outline-none
+              focus-visible:ring-1
+              focus-visible:ring-current
+              focus-visible:ring-offset-2
+              focus-visible:ring-offset-white"
             aria-label="Dismiss notification"
           >
             ✕

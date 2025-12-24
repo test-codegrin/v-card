@@ -32,58 +32,101 @@ export default function ShareClient({ slug }: Props) {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${card.fullName || 'contact'}.vcf`;
+    link.download = `${card.fullName || card.businessName || 'contact'}.vcf`;
     link.click();
     URL.revokeObjectURL(url);
   };
 
+  /* ---------------- LOADING ---------------- */
   if (loading) {
-    return <div className="text-white/70">Loading card...</div>;
+    return (
+      <div className="flex justify-center py-20 text-gray-500">
+        Loading card…
+      </div>
+    );
   }
 
+  /* ---------------- NOT FOUND ---------------- */
   if (!card) {
     return (
-      <div className="glass space-y-4 rounded-2xl p-6 text-white">
-        <h1 className="text-2xl font-semibold">Card not found</h1>
-        <p className="text-white/70">This card is not available.</p>
-        <Button variant="ghost" onClick={() => router.push('/')}>
+      <div className="mx-auto max-w-lg rounded-2xl border border-black/10 bg-white p-6 text-center shadow-sm">
+        <h1 className="text-2xl font-semibold text-black">
+          Card not found
+        </h1>
+        <p className="mt-1 text-sm text-gray-600">
+          This card is not available or has been removed.
+        </p>
+
+        <Button
+          variant="ghost"
+          className="mt-4"
+          onClick={() => router.push('/')}
+        >
           Back home
         </Button>
       </div>
     );
   }
 
+  /* ---------------- MAIN ---------------- */
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-3xl space-y-8">
+      {/* HEADER */}
       <div className="text-center space-y-2">
-        <p className="caption">Digital card</p>
-        <h1 className="heading-2">
-          {card.cardType === 'business' ? card.businessName || 'Business Card' : card.fullName}
+        <p className="text-xs uppercase tracking-widest text-[#9f2b34]">
+          Digital Card
+        </p>
+
+        <h1 className="text-3xl font-semibold text-black">
+          {card.cardType === 'business'
+            ? card.businessName || 'Business Card'
+            : card.fullName}
         </h1>
-        <p className="text-xs uppercase tracking-wide text-white/60">Template: {card.template || 'modern'}</p>
+
+        <p className="text-xs uppercase tracking-wide text-gray-500">
+          Template: {card.template || 'modern'}
+        </p>
       </div>
-      <div className="glass p-6">
+
+      {/* CARD PREVIEW */}
+      <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
         <CardPreview card={card} />
       </div>
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        <Button variant="primary" onClick={handleSaveContact}>
-          Save Contact (.vcf)
-        </Button>
-        {card.phone && (
-          <a href={`tel:${card.phone}`} className="inline-flex">
-            <Button variant="light">Call</Button>
-          </a>
-        )}
-        {card.email && (
-          <a href={`mailto:${card.email}`} className="inline-flex">
-            <Button variant="light">Email</Button>
-          </a>
-        )}
-        {card.website && (
-          <a href={card.website} target="_blank" rel="noreferrer" className="inline-flex">
-            <Button variant="light">Website</Button>
-          </a>
-        )}
+
+      {/* ACTIONS */}
+      <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm space-y-5">
+        <p className="text-center text-xs uppercase tracking-widest text-gray-400">
+          Quick actions
+        </p>
+
+        <div className="flex flex-wrap justify-center gap-3">
+          <Button onClick={handleSaveContact}>
+            Save Contact (.vcf)
+          </Button>
+
+          {card.phone && (
+            <a href={`tel:${card.phone}`} className="inline-flex">
+              <Button variant="light">Call</Button>
+            </a>
+          )}
+
+          {card.email && (
+            <a href={`mailto:${card.email}`} className="inline-flex">
+              <Button variant="light">Email</Button>
+            </a>
+          )}
+
+          {card.website && (
+            <a
+              href={card.website}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex"
+            >
+              <Button variant="light">Website</Button>
+            </a>
+          )}
+        </div>
       </div>
     </div>
   );

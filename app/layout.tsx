@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${manrope.variable} bg-black text-white`}>
+      <body className={`${manrope.variable} bg-white text-black`}>
         <ToastProvider>
           <AppLayout>{children}</AppLayout>
         </ToastProvider>

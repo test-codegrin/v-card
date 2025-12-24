@@ -31,22 +31,12 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-secondary/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-black">
       <div className="container flex items-center justify-between md:px:4 lg:px-12 py-4">
 
         {/* LOGO */}
-        <Link href="/" className="flex items-center gap-3 text-lg font-semibold text-white">
-          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-primary shadow-card-hover">
-            V
-          </span>
-          <div className="hidden sm:flex flex-col leading-tight">
-            <span className="text-xs uppercase tracking-[0.22em] text-primary">
-              V-Card
-            </span>
-            <span className="text-base font-semibold text-white">
-              Identity Studio
-            </span>
-          </div>
+        <Link href="/" className="flex items-center gap-3 font-semibold text-white">
+          <img src="/images/PROLIFT-Dark-Apparel-Embroidery-Logo.png" alt="" className='w-[200px]' />
         </Link>
 
         {/* DESKTOP + TABLET NAV */}
@@ -72,11 +62,11 @@ export default function Navbar() {
           {mounted && initialized && user ? (
             <>
               {/* Hide email on tablets */}
-              <div className="hidden lg:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/80">
+              <div className="hidden lg:flex items-center gap-2 rounded-full border border-white/10 bg-white px-2 py-1 text-xs text-white/80">
                 <span className="rounded-full bg-primary/20 px-2 py-1 text-primary">
                   {user.name ?? 'User'}
                 </span>
-                <span className="text-white/60">{user.email}</span>
+                <span className="text-black font-medium">{user.email}</span>
               </div>
 
               <Button variant="ghost" size="sm" onClick={handleLogout}>

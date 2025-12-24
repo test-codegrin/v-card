@@ -179,421 +179,256 @@ export default function NewCardPage() {
     }
   };
 
-  return (
-    <div className="space-y-8">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <p className="caption">Create</p>
-          <h1 className="heading-2">New V-Card</h1>
-          <p className="text-sm text-white/70">
-            Switch templates, keep your data, and preview changes live.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <span className="ds-badge">Autosave ready</span>
-          <span className="ds-badge">Live preview</span>
-          <span className="ds-badge">QR ready</span>
-        </div>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <form onSubmit={handleSubmit(onSubmit)} className="panel space-y-6 p-6">
-          <div className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
-            <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-wide text-white/70">
-                Card Type
-              </p>
-              <div className="flex gap-3">
-                {(['personal', 'business'] as const).map((type) => (
-                  <button
-                    key={type}
-                    type="button"
-                    className={clsx(
-                      'flex-1 rounded-xl border px-4 py-3 text-left text-sm font-semibold transition',
-                      cardType === type
-                        ? 'border-primary/60 bg-primary/10 text-white shadow-card-hover'
-                        : 'border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:text-white'
-                    )}
-                    onClick={() =>
-                      setValue('cardType', type, {
-                        shouldDirty: true,
-                        shouldValidate: true
-                      })
-                    }
-                  >
-                    {type === 'personal' ? 'Personal' : 'Business'}
-                  </button>
-                ))}
-              </div>
-              <input type="hidden" {...register('cardType')} value={cardType} />
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-wide text-white/70">
-                Template
-              </p>
-              <TemplateSelector
-                value={template || 'modern'}
-                onChange={(next) =>
-                  setValue('template', next, {
-                    shouldDirty: true,
-                    shouldValidate: true
-                  })
-                }
-              />
-            </div>
-          </div>
-
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-  {cardType === 'personal' ? (
-    <>
-      <Input
-        tone="dark"
-        label="Full Name"
-        placeholder="Alex Doe"
-        error={err.fullName?.message}
-        {...register('fullName')}
-      />
-
-      <Input
-        tone="dark"
-        label="Job Title"
-        placeholder="Product Designer"
-        error={err.role?.message}
-        {...register('role')}
-      />
-
-      <Input
-        tone="dark"
-        label="Company"
-        placeholder="Acme Inc"
-        error={err.company?.message}
-        {...register('company')}
-      />
-    </>
-  ) : (
-    <>
-      <Input
-        tone="dark"
-        label="Business Name"
-        placeholder="Acme Studio"
-        error={err.businessName?.message}
-        {...register('businessName')}
-      />
-
-      <Input
-        tone="dark"
-        label="Business Tagline / About"
-        placeholder="We build great products"
-        error={err.tagline?.message}
-        {...register('tagline')}
-      />
-    </>
-  )}
-
-  <Input
-    tone="dark"
-    label="Email"
-    placeholder="you@company.com"
-    type="email"
-    error={err.email?.message}
-    {...register('email')}
-  />
-
-  <Input
-    tone="dark"
-    label="Phone"
-    placeholder="+1 555 123 4567"
-    error={err.phone?.message}
-    {...register('phone')}
-  />
-
-  <Input
-    tone="dark"
-    label="Website"
-    placeholder="https://example.com"
-    error={err.website?.message}
-    {...register('website')}
-  />
-
-  <Input
-    tone="dark"
-    label="Location / Address"
-    placeholder="City, Country"
-    error={err.address?.message}
-    {...register('address')}
-  />
-
-  <TextArea
-    tone="dark"
-    label={cardType === 'business' ? 'About / Description' : 'Bio'}
-    rows={3}
-    maxLength={200}
-    placeholder={
-      cardType === 'business'
-        ? 'What your business does'
-        : 'Tell people what you do in under 200 characters.'
-    }
-    error={err.bio?.message}
-    {...register('bio')}
-  />
-</div>
-
-<div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-  {cardType === 'business' ? (
-    <>
-      <Input
-        tone="dark"
-        label="Facebook"
-        placeholder="https://facebook.com/yourpage"
-        error={err.social?.facebook?.message}
-        {...register('social.facebook')}
-      />
-
-      <Input
-        tone="dark"
-        label="LinkedIn"
-        placeholder="https://linkedin.com/company/you"
-        error={err.social?.linkedin?.message}
-        {...register('social.linkedin')}
-      />
-
-      <Input
-        tone="dark"
-        label="Instagram"
-        placeholder="https://instagram.com/you"
-        error={err.social?.instagram?.message}
-        {...register('social.instagram')}
-      />
-
-      <Input
-        tone="dark"
-        label="YouTube"
-        placeholder="https://youtube.com/@you"
-        error={err.social?.youtube?.message}
-        {...register('social.youtube')}
-      />
-    </>
-  ) : (
-    <>
-      <Input
-        tone="dark"
-        label="LinkedIn"
-        placeholder="https://linkedin.com/in/you"
-        error={err.social?.linkedin?.message}
-        {...register('social.linkedin')}
-      />
-
-      <Input
-        tone="dark"
-        label="Instagram"
-        placeholder="https://instagram.com/you"
-        error={err.social?.instagram?.message}
-        {...register('social.instagram')}
-      />
-
-      <Input
-        tone="dark"
-        label="YouTube"
-        placeholder="https://youtube.com/@you"
-        error={err.social?.youtube?.message}
-        {...register('social.youtube')}
-      />
-
-      <Input
-        tone="dark"
-        label="Twitter"
-        placeholder="https://twitter.com/you"
-        error={err.social?.twitter?.message}
-        {...register('social.twitter')}
-      />
-
-      <Input
-        tone="dark"
-        label="GitHub"
-        placeholder="https://github.com/you"
-        error={err.social?.github?.message}
-        {...register('social.github')}
-      />
-    </>
-  )}
-</div>
-
-{cardType === 'business' && (
-  <div className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4">
-    <div className="flex items-center justify-between">
+ return (
+  <div className="space-y-10">
+    {/* HEADER */}
+    <div className="flex flex-wrap items-center justify-between gap-4">
       <div>
-        <p className="text-sm font-semibold text-white">Services</p>
-        <p className="text-xs text-white/60">Add what you offer</p>
+        <p className="caption">Create</p>
+        <h1 className="heading-2">New V-Card</h1>
+        <p className="text-sm text-gray-600">
+          Switch templates, keep your data, and preview changes live.
+        </p>
       </div>
 
-      <Button
-        type="button"
-        size="sm"
-        variant="ghost"
-        onClick={() => appendService({ name: '', description: '' })}
-      >
-        Add
-      </Button>
-    </div>
-
-    <div className="space-y-3">
-      {serviceFields.map((field, index) => (
-        <div
-          key={field.id}
-          className="grid gap-2 rounded-xl border border-white/10 bg-white/5 p-3 sm:grid-cols-2"
-        >
-          <Input
-            tone="dark"
-            label="Service name"
-            error={err.services?.[index]?.name?.message}
-            {...register(`services.${index}.name` as const)}
-          />
-
-          <Input
-            tone="dark"
-            label="Short description"
-            error={err.services?.[index]?.description?.message}
-            {...register(`services.${index}.description` as const)}
-          />
-
-          <div className="sm:col-span-2 flex justify-end">
-            <Button
-              type="button"
-              size="sm"
-              variant="ghost"
-              onClick={() => removeService(index)}
-            >
-              Remove
-            </Button>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-)}
-
-{cardType === 'business' && (
-  <div className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4">
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-sm font-semibold text-white">Products</p>
-        <p className="text-xs text-white/60">Add key products with links</p>
+      <div className="flex flex-wrap gap-2">
+        <span className="ds-badge">Autosave ready</span>
+        <span className="ds-badge">Live preview</span>
+        <span className="ds-badge">QR ready</span>
       </div>
+    </div>
 
-      <Button
-        type="button"
-        size="sm"
-        variant="ghost"
-        onClick={() => appendProduct({ name: '', link: '' })}
+    <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+      {/* FORM */}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="panel space-y-8 p-6 bg-white"
       >
-        Add
-      </Button>
-    </div>
+        {/* TYPE + TEMPLATE */}
+        <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+          <div className="space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-wide text-gray-600">
+              Card Type
+            </p>
 
-    <div className="space-y-3">
-      {productFields.map((field, index) => (
-        <div
-          key={field.id}
-          className="grid gap-2 rounded-xl border border-white/10 bg-white/5 p-3 sm:grid-cols-2"
-        >
-          <Input
-            tone="dark"
-            label="Product name"
-            error={err.products?.[index]?.name?.message}
-            {...register(`products.${index}.name` as const)}
-          />
-
-          <Input
-            tone="dark"
-            label="Product link"
-            placeholder="https://example.com/product"
-            error={err.products?.[index]?.link?.message}
-            {...register(`products.${index}.link` as const)}
-          />
-
-          <div className="sm:col-span-2 flex justify-end">
-            <Button
-              type="button"
-              size="sm"
-              variant="ghost"
-              onClick={() => removeProduct(index)}
-            >
-              Remove
-            </Button>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-)}
-
-<div className="space-y-2 rounded-2xl border border-white/10 bg-white/5 p-4">
-  <label className="text-sm font-semibold text-white">
-    {cardType === 'business' ? 'Logo upload' : 'Profile image'}
-  </label>
-
-  <input
-    type="file"
-    accept="image/*"
-    onChange={handleFileChange}
-    className="block w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white
-      file:mr-3 file:cursor-pointer file:rounded-md file:border-0
-      file:bg-primary file:px-3 file:py-2 file:font-semibold file:text-white"
-  />
-
-  {uploadError && (
-    <p className="text-xs text-red-400">{uploadError}</p>
-  )}
-</div>
-
-<div className="flex justify-end">
-  <Button
-    type="submit"
-    loading={isSubmitting}
-    onClick={() => console.log('[NewCardPage] Save button clicked')}
-  >
-    Save Card
-  </Button>
-</div>
-        </form>
-
-        <div className="glass p-6">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-white">Live preview</h3>
-            <span className="text-xs uppercase tracking-wide text-white/60">
-              Template: {template || 'modern'}
-            </span>
+            <div className="flex gap-3">
+              {(['personal', 'business'] as const).map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  className={clsx(
+                    'flex-1 rounded-xl border px-4 py-3 text-sm font-semibold transition',
+                    cardType === type
+                      ? 'border-[#9f2b34] bg-[#9f2b34]/5 text-[#9f2b34]'
+                      : 'border-black/10 bg-white hover:bg-black/5'
+                  )}
+                  onClick={() =>
+                    setValue('cardType', type, {
+                      shouldDirty: true,
+                      shouldValidate: true
+                    })
+                  }
+                >
+                  {type === 'personal' ? 'Personal' : 'Business'}
+                </button>
+              ))}
+            </div>
+            <input type="hidden" {...register('cardType')} />
           </div>
 
-          <div className="mt-4">
-            <CardPreview
-              card={{
-                cardType,
-                template: values.template ?? 'modern',
-                ownerEmail: authUser?.email || 'preview@example.com',
-                fullName: values.fullName || 'Full Name',
-                role: values.role || 'Job Title',
-                company: values.company,
-                businessName: values.businessName || 'Business Name',
-                tagline: values.tagline,
-                email: values.email || 'you@company.com',
-                phone: values.phone,
-                website: values.website,
-                address: values.address,
-                bio: values.bio,
-                services: values.services,
-                products: values.products,
-                socials: values.social,
-                profileImage: values.profileImage,
-                logo: values.logo,
-                slug: 'preview',
-                createdAt: new Date().toISOString()
-              }}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-gray-600 mb-2">
+              Template
+            </p>
+            <TemplateSelector
+              value={template || 'modern'}
+              onChange={(t) =>
+                setValue('template', t, {
+                  shouldDirty: true,
+                  shouldValidate: true
+                })
+              }
             />
           </div>
         </div>
+
+        {/* BASIC DETAILS */}
+        <div className="grid gap-4 lg:grid-cols-2">
+          {cardType === 'personal' ? (
+            <>
+              <Input tone="light" label="Full Name" {...register('fullName')} />
+              <Input tone="light" label="Job Title" {...register('role')} />
+              <Input tone="light" label="Company" {...register('company')} />
+            </>
+          ) : (
+            <>
+              <Input tone="light" label="Business Name" {...register('businessName')} />
+              <Input tone="light" label="Tagline" {...register('tagline')} />
+            </>
+          )}
+
+          <Input tone="light" label="Email" {...register('email')} />
+          <Input tone="light" label="Phone" {...register('phone')} />
+          <Input tone="light" label="Website" {...register('website')} />
+          <Input tone="light" label="Address" {...register('address')} />
+
+          <TextArea
+            tone="light"
+            label={cardType === 'business' ? 'About / Description' : 'Bio'}
+            rows={3}
+            {...register('bio')}
+          />
+        </div>
+
+        {/* SOCIAL LINKS */}
+        <div className="space-y-4">
+          <p className="text-sm font-semibold text-gray-700">Social Links</p>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <Input tone="light" label="LinkedIn" {...register('social.linkedin')} />
+            <Input tone="light" label="Instagram" {...register('social.instagram')} />
+            <Input tone="light" label="YouTube" {...register('social.youtube')} />
+            <Input tone="light" label="Twitter" {...register('social.twitter')} />
+            <Input tone="light" label="GitHub" {...register('social.github')} />
+            {cardType === 'business' && (
+              <Input tone="light" label="Facebook" {...register('social.facebook')} />
+            )}
+          </div>
+        </div>
+
+        {/* SERVICES */}
+        {cardType === 'business' && (
+          <div className="space-y-4 rounded-xl border border-black/10 bg-black/5 p-4">
+            <div className="flex justify-between">
+              <div>
+                <p className="font-semibold">Services</p>
+                <p className="text-xs text-gray-600">What you offer</p>
+              </div>
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                onClick={() => appendService({ name: '', description: '' })}
+              >
+                Add
+              </Button>
+            </div>
+
+            {serviceFields.map((field, i) => (
+              <div
+                key={field.id}
+                className="grid gap-3 rounded-xl border border-black/10 bg-white p-3 sm:grid-cols-2"
+              >
+                <Input tone="light" label="Service Name" {...register(`services.${i}.name`)} />
+                <Input tone="light" label="Description" {...register(`services.${i}.description`)} />
+
+                <div className="sm:col-span-2 flex justify-end">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => removeService(i)}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* PRODUCTS */}
+        {cardType === 'business' && (
+          <div className="space-y-4 rounded-xl border border-black/10 bg-black/5 p-4">
+            <div className="flex justify-between">
+              <div>
+                <p className="font-semibold">Products</p>
+                <p className="text-xs text-gray-600">Key offerings</p>
+              </div>
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                onClick={() => appendProduct({ name: '', link: '' })}
+              >
+                Add
+              </Button>
+            </div>
+
+            {productFields.map((field, i) => (
+              <div
+                key={field.id}
+                className="grid gap-3 rounded-xl border border-black/10 bg-white p-3 sm:grid-cols-2"
+              >
+                <Input tone="light" label="Product Name" {...register(`products.${i}.name`)} />
+                <Input tone="light" label="Product Link" {...register(`products.${i}.link`)} />
+
+                <div className="sm:col-span-2 flex justify-end">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => removeProduct(i)}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* IMAGE UPLOAD */}
+        <div className="rounded-xl border border-black/10 bg-black/5 p-4">
+          <label className="font-semibold">
+            {cardType === 'business' ? 'Logo Upload' : 'Profile Image'}
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="mt-2 w-full rounded-xl border border-black/10 bg-white px-4 py-3"
+          />
+          {uploadError && <p className="text-xs text-red-500">{uploadError}</p>}
+        </div>
+
+        {/* SAVE */}
+        <div className="flex justify-end">
+          <Button type="submit" loading={isSubmitting}>
+            Save Card
+          </Button>
+        </div>
+      </form>
+
+      {/* PREVIEW */}
+      <div className="glass p-6 bg-white">
+        <h3 className="text-lg font-semibold mb-3">Live Preview</h3>
+        <CardPreview
+          card={{
+            cardType,
+            template: values.template ?? 'modern',
+            ownerEmail: authUser?.email || 'preview@example.com',
+            fullName: values.fullName || 'Full Name',
+            role: values.role || 'Job Title',
+            businessName: values.businessName || 'Business Name',
+            tagline: values.tagline,
+            email: values.email,
+            phone: values.phone,
+            website: values.website,
+            address: values.address,
+            bio: values.bio,
+            services: values.services,
+            products: values.products,
+            socials: values.social,
+            profileImage: values.profileImage,
+            logo: values.logo,
+            slug: 'preview',
+            createdAt: new Date().toISOString()
+          }}
+        />
       </div>
     </div>
-  );
+  </div>
+);
+
 }
