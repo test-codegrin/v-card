@@ -11,19 +11,16 @@ type ToastProps = {
   onDismiss?: () => void;
 };
 
-/* -------------------------------------------
-   WINE THEME TOAST STYLES
-------------------------------------------- */
+/*  DARK NAVBAR + WINE TOAST */
 const variantStyles: Record<ToastVariant, string> = {
   success:
-    'border-[#9f2b34]/40 bg-[#9f2b34]/10 text-[#7a1f27]',
-  error:
-    'border-[#7a1f27]/60 bg-[#7a1f27]/15 text-[#5a141b]',
+    'border-[#9f2b34] bg-[#1a1a1a] text-white',
   info:
-    'border-[#9f2b34]/30 bg-[#9f2b34]/08 text-[#9f2b34]'
+    'border-[#9f2b34]/80 bg-[#111111] text-white',
+  error:
+    'border-red-500 bg-[#1a1a1a] text-white'
 };
 
-// Reusable toast surface aligned with wine theme
 export function Toast({
   title,
   message,
@@ -33,31 +30,32 @@ export function Toast({
   return (
     <div
       className={clsx(
-        'relative overflow-hidden rounded-xl border px-4 py-3',
-        'shadow-[0_10px_30px_-12px_rgba(159,43,52,0.35)]',
-        'backdrop-blur-md',
+        'relative rounded-xl border px-4 py-3',
+        'shadow-lg',
         variantStyles[variant]
       )}
       role="status"
       aria-live="polite"
     >
-      {/* subtle glass highlight */}
-      <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-white/10 opacity-60" />
-
-      <div className="relative flex items-start gap-3">
-        {/* indicator dot */}
-        <div
-          className="mt-1 h-2.5 w-2.5 rounded-full bg-current"
+      <div className="flex items-start gap-3">
+        {/* Indicator */}
+        <span
+          className={clsx(
+            'mt-1 h-2.5 w-2.5 shrink-0 rounded-full',
+            variant === 'error'
+              ? 'bg-red-500'
+              : 'bg-[#9f2b34]'
+          )}
           aria-hidden
         />
 
         <div className="flex-1">
           {title && (
-            <p className="text-sm font-semibold leading-none">
+            <p className="text-sm font-semibold leading-tight">
               {title}
             </p>
           )}
-          <p className="mt-0.5 text-sm leading-relaxed">
+          <p className="mt-0.5 text-sm leading-relaxed text-white/90">
             {message}
           </p>
         </div>
@@ -65,13 +63,13 @@ export function Toast({
         {onDismiss && (
           <button
             onClick={onDismiss}
-            className="text-xs font-semibold text-current transition
-              hover:scale-110
+            className="ml-2 text-xs font-semibold text-white/70
+              transition hover:text-white
               focus-visible:outline-none
-              focus-visible:ring-1
-              focus-visible:ring-current
+              focus-visible:ring-2
+              focus-visible:ring-[#9f2b34]
               focus-visible:ring-offset-2
-              focus-visible:ring-offset-white"
+              focus-visible:ring-offset-black"
             aria-label="Dismiss notification"
           >
             ✕

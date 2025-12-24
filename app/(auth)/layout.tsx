@@ -4,7 +4,11 @@ import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export default function AuthLayout({
+  children
+}: {
+  children: React.ReactNode;
+}) {
   const { user, initialized, loading, fetchMe } = useAuthStore();
   const router = useRouter();
 
@@ -20,17 +24,29 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     }
   }, [initialized, user, router]);
 
+  /*  LOADING */
   if (!initialized || loading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center text-white/70">
-        Checking your session...
+      <div className="flex min-h-[70vh] flex-col items-center justify-center gap-3">
+        {/* spinner */}
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#9f2b34]/30 border-t-[#9f2b34]" />
+
+        <p className="text-sm font-medium text-[#9f2b34]">
+          Checking your session…
+        </p>
+
+        <p className="text-xs text-gray-500">
+          Securing your workspace
+        </p>
       </div>
     );
   }
 
+  /*  AUTHED */
   if (user) {
     return null;
   }
 
+  /*  GUEST */
   return <>{children}</>;
 }

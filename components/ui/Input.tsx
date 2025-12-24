@@ -42,7 +42,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
           'focus-within:-translate-y-[1px] focus-within:shadow-md',
           toneClasses[tone],
           error &&
-            'border-red-400 focus-within:border-red-400 focus-within:shadow-none',
+          'border-red-400 focus-within:border-red-400 focus-within:shadow-none',
           className
         )}
       >
@@ -58,17 +58,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
           </label>
         )}
 
-     <input
-  id={inputId}
-  ref={ref}
-  className={clsx(
-    'peer w-full bg-transparent text-sm font-semibold outline-none',
-    'placeholder:text-gray-400 focus:outline-none',
-    tone === 'dark' ? 'text-white' : 'text-black'
-  )}
-  placeholder={props.placeholder}
-  {...props}
-/>
+        <input
+          id={inputId}
+          ref={ref}
+          className={clsx(
+            'peer w-full bg-transparent text-sm font-semibold outline-none',
+            'placeholder:text-gray-400 focus:outline-none',
+            tone === 'dark' ? 'text-white' : 'text-black'
+          )}
+          placeholder={props.placeholder}
+          {...props}
+        />
       </div>
 
       {hint && !error && (

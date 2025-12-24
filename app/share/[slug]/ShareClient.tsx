@@ -37,7 +37,7 @@ export default function ShareClient({ slug }: Props) {
     URL.revokeObjectURL(url);
   };
 
-  /* ---------------- LOADING ---------------- */
+  /*  LOADING  */
   if (loading) {
     return (
       <div className="flex justify-center py-20 text-gray-500">
@@ -46,7 +46,7 @@ export default function ShareClient({ slug }: Props) {
     );
   }
 
-  /* ---------------- NOT FOUND ---------------- */
+  /* NOT FOUND  */
   if (!card) {
     return (
       <div className="mx-auto max-w-lg rounded-2xl border border-black/10 bg-white p-6 text-center shadow-sm">
@@ -68,9 +68,9 @@ export default function ShareClient({ slug }: Props) {
     );
   }
 
-  /* ---------------- MAIN ---------------- */
+  /*   MAIN   */
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
+    <div className="mx-auto max-w-8xl space-y-8">
       {/* HEADER */}
       <div className="text-center space-y-2">
         <p className="text-xs uppercase tracking-widest text-[#9f2b34]">
