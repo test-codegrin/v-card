@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import Button from '@/components/ui/Button';
 import { useCardStore } from '@/store/cardStore';
@@ -8,10 +9,13 @@ import { useAuthStore } from '@/store/authStore';
 import { formatDate } from '@/lib/utils';
 
 export default function DashboardPage() {
+  const router = useRouter();
   const { cards, loading, fetchCards, deleteCard } = useCardStore();
   const { user } = useAuthStore();
+
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<'newest' | 'oldest'>('newest');
+  const [deleteSlug, setDeleteSlug] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) fetchCards();
@@ -53,9 +57,10 @@ export default function DashboardPage() {
       );
   }, [cards, search, sort, user?.email]);
 
-  const handleDelete = async (slug: string) => {
-    if (!window.confirm('Delete this card?')) return;
-    await deleteCard(slug);
+  const confirmDelete = async () => {
+    if (!deleteSlug) return;
+    await deleteCard(deleteSlug);
+    setDeleteSlug(null);
   };
 
   if (loading && cards.length === 0) {
@@ -67,12 +72,8 @@ export default function DashboardPage() {
       {/* HEADER */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-[15px] caption text-[#9f2b34]">
-            Dashboard
-          </p>
-          <h1 className="text-4xl font-semibold text-black">
-            Your V-Cards
-          </h1>
+          <p className="caption text-[#9f2b34]">Dashboard</p>
+          <h1 className="text-4xl font-semibold text-black">Your V-Cards</h1>
         </div>
 
         <div className="flex gap-3">
@@ -86,14 +87,13 @@ export default function DashboardPage() {
       </div>
 
       {/* SEARCH & SORT */}
-      <div className="flex flex-wrap items-center gap-3 rounded-2xl border order-[#9f2b34] bg-[#9f2b34]/10 p-4 shadow-sm">
+      <div className="flex flex-wrap items-center gap-3 rounded-2xl border bg-[#9f2b34]/10 p-4 shadow-sm">
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by name, company, email…"
           className="w-full max-w-md rounded-xl border border-black/10 bg-white px-4 py-3 text-sm
-            placeholder:text-gray-400
-            focus:border-[#9f2b34] focus:outline-none"
+            placeholder:text-gray-400 focus:border-[#9f2b34] focus:outline-none"
         />
 
         <select
@@ -110,9 +110,7 @@ export default function DashboardPage() {
       {/* EMPTY STATE */}
       {filteredCards.length === 0 ? (
         <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-semibold text-black">
-            No cards yet
-          </h2>
+          <h2 className="text-xl font-semibold text-black">No cards yet</h2>
           <p className="mt-1 text-sm text-gray-600">
             Create your first digital card to get started.
           </p>
@@ -125,10 +123,9 @@ export default function DashboardPage() {
         /* CARD GRID */
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {filteredCards.map((card) => (
-            <Link
+            <div
               key={card.slug}
-              href={`/cards/${encodeURIComponent(card.slug)}`}
-              className="group block rounded-2xl border border-[#9f2b34] bg-[#9f2b34]/10 p-4
+              className="group rounded-2xl border border-[#9f2b34] bg-[#9f2b34]/10 p-4
                 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
             >
               {/* TOP */}
@@ -188,29 +185,51 @@ export default function DashboardPage() {
 
               {/* ACTIONS */}
               <div className="mt-4 flex flex-wrap gap-2">
-                <Link href={`/share/${card.slug}`} onClick={(e) => e.stopPropagation()}>
+                <Link href={`/share/${card.slug}`}>
                   <Button variant="secondary" size="sm">
                     Share
                   </Button>
                 </Link>
 
-                <Button variant="ghost" size="sm">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => router.push(`/cards/${card.slug}`)}
+                >
                   Open
                 </Button>
 
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(card.slug);
-                  }}
+                  onClick={() => setDeleteSlug(card.slug)}
                 >
                   Delete
                 </Button>
               </div>
-            </Link>
+            </div>
           ))}
+        </div>
+      )}
+
+      {/* DELETE CONFIRMATION MODAL */}
+      {deleteSlug && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
+            <h3 className="text-lg font-semibold text-black">Delete Card?</h3>
+            <p className="mt-2 text-sm text-gray-600">
+              This action cannot be undone.
+            </p>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <Button variant="ghost" onClick={() => setDeleteSlug(null)}>
+                Cancel
+              </Button>
+              <Button variant="secondary" onClick={confirmDelete} className="bg-red-600 hover:bg-red-700 text-white">
+                Delete
+              </Button>
+            </div>
+          </div>
         </div>
       )}
     </div>

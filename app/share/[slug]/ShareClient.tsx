@@ -73,17 +73,17 @@ export default function ShareClient({ slug }: Props) {
     <div className="mx-auto max-w-8xl space-y-8">
       {/* HEADER */}
       <div className="text-center space-y-2">
-        <p className="text-xs uppercase tracking-widest text-[#9f2b34]">
+        <p className="text-lg uppercase tracking-widest text-[#9f2b34]">
           Digital Card
         </p>
 
-        <h1 className="text-3xl font-semibold text-black">
+        <h1 className="text-4xl font-semibold text-black">
           {card.cardType === 'business'
             ? card.businessName || 'Business Card'
             : card.fullName}
         </h1>
 
-        <p className="text-xs uppercase tracking-wide text-gray-500">
+        <p className="text-md uppercase tracking-wide text-gray-500">
           Template: {card.template || 'modern'}
         </p>
       </div>

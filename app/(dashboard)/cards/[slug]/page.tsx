@@ -106,15 +106,15 @@ export default function CardDetailPage() {
       {/* HEADER */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-widest text-[#9f2b34]">
+          <p className="text-md uppercase tracking-widest text-[#9f2b34]">
             Card details
           </p>
-          <h1 className="text-3xl font-semibold text-black">
+          <h1 className="text-4xl font-semibold text-black">
             {card.cardType === 'business'
               ? card.businessName || 'Business Card'
               : card.fullName}
           </h1>
-          <p className="mt-1 text-xs uppercase tracking-wide text-gray-500">
+          <p className="pt-2 text-xs uppercase tracking-wide text-gray-500">
             Template: {card.template}
           </p>
         </div>

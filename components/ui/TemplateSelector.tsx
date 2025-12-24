@@ -52,7 +52,7 @@ export default function TemplateSelector({ value, onChange }: TemplateSelectorPr
                 </p>
 
                 {isActive && (
-                  <span className="rounded-full bg-[#9f2b34] px-2 py-0.5 text-[11px] font-semibold text-white">
+                  <span className="rounded-full bg-[#9f2b34] px-1 py-0.5 text-[11px] font-semibold text-white">
                     Active
                   </span>
                 )}

@@ -184,7 +184,7 @@ export default function NewCardPage() {
     {/* HEADER */}
     <div className="flex flex-wrap items-center justify-between gap-4">
       <div>
-        <p className="caption">Create</p>
+        <p className="caption text-lg">Create</p>
         <h1 className="heading-2">New V-Card</h1>
         <p className="text-sm text-gray-600">
           Switch templates, keep your data, and preview changes live.
@@ -410,7 +410,7 @@ export default function NewCardPage() {
             ownerEmail: authUser?.email || 'preview@example.com',
             fullName: values.fullName || 'Full Name',
             role: values.role || 'Job Title',
-            company: values.company || 'Company Name',
+            company: values.company ,
             businessName: values.businessName || 'Business Name',
             tagline: values.tagline,
             email: values.email,
