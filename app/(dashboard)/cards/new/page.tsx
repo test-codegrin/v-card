@@ -410,6 +410,7 @@ export default function NewCardPage() {
             ownerEmail: authUser?.email || 'preview@example.com',
             fullName: values.fullName || 'Full Name',
             role: values.role || 'Job Title',
+            company: values.company || 'Company Name',
             businessName: values.businessName || 'Business Name',
             tagline: values.tagline,
             email: values.email,

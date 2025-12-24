@@ -70,10 +70,10 @@ export default function LoginPage() {
         </p>
 
         <div className="flex flex-wrap gap-2">
-          <span className="rounded-full bg-[#9f2b34]/10 px-3 py-1 text-xs font-semibold text-[#9f2b34]">
+          <span className="ds-badge">
             Secure
           </span>
-          <span className="rounded-full bg-[#9f2b34]/10 px-3 py-1 text-xs font-semibold text-[#9f2b34]">
+          <span className="ds-badge">
             Instant access
           </span>
         </div>
