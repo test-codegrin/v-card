@@ -54,7 +54,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+    <div className="grid gap-10 lg:py-48 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
       {/* LEFT CONTENT */}
       <div className="space-y-4">
         <p className="text-lg uppercase tracking-widest text-[#9f2b34]">

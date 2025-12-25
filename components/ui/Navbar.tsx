@@ -50,7 +50,7 @@ export default function Navbar() {
 
   const handleAdminLogout = () => {
     adminLogout();
-    router.push('/admin/login');
+    router.push('/admin');
   };
 
   const isAdmin = mounted && adminInitialized && !!admin;

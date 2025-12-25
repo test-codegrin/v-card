@@ -61,7 +61,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+    <div className="grid gap-8 lg:py-36 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
       {/* LEFT CONTENT */}
       <div className="space-y-4">
         <p className="caption text-xl text-[#9f2b34]">Join us</p>

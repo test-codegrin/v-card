@@ -117,7 +117,7 @@ export default function AdminLoginPage() {
   }, [cooldown, step]);
 
   return (
-    <div className="grid pt-40 gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+    <div className="grid lg:py-52 gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
       {/* LEFT CONTENT */}
       <div className="space-y-4">
         <p className="text-lg uppercase tracking-widest text-[#9f2b34]">
