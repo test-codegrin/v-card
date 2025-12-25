@@ -47,33 +47,31 @@ function Avatar({
   fallback: string;
   square?: boolean;
 }) {
-  // Show image if available
-  if (src) {
-    return (
-      <img
-        src={src}
-        alt={fallback}
-        className={clsx(
-          'h-40 w-40 object-cover ring-2 ring-primary/30 shadow-card-hover',
-          square ? 'rounded-xl' : 'rounded-full'
-        )}
-      />
-    );
-  }
+  const shape = square ? 'rounded-xl' : 'rounded-full';
 
-  // Solid color initial avatar
   return (
     <div
       className={clsx(
-        'flex h-40 w-40 items-center justify-center text-5xl font-semibold text-white ring-2 ring-primary/30 shadow-card-hover',
-        square ? 'rounded-xl' : 'rounded-full',
-        'bg-slate-700'
+        'relative h-40 w-50 overflow-hidden ring-2 ring-primary/30 shadow-card-hover bg-white',
+        shape,
+        !src && 'bg-slate-700 flex items-center justify-center'
       )}
     >
-      {fallback?.charAt(0)?.toUpperCase() ?? 'V'}
+      {src ? (
+        <img
+          src={src}
+          alt={fallback}
+          className="h-full w-full object-fit object-center"
+        />
+      ) : (
+        <span className="text-5xl w-40 font-semibold text-black text-center">
+          {fallback?.charAt(0)?.toUpperCase() ?? 'V'}
+        </span>
+      )}
     </div>
   );
 }
+
 
 const socialIcons: Record<string, JSX.Element> = {
   facebook: (
@@ -120,13 +118,14 @@ function ModernTemplate({ card }: { card: Card }) {
       <div className="h-32 bg-gradient-to-r from-[#284b63] via-[#284b63]/85 to-[#284b63]/60" />
 
       {/* Avatar */}
-      <div className="-mt-20 flex justify-center">
+      <div className="-mt-20 flex object-cover justify-center">
         <Avatar
           src={card.cardType === 'business' ? card.logo : card.profileImage}
           fallback={
             card.cardType === 'business'
               ? card.businessName || 'B'
               : card.fullName || 'V'
+          
           }
           square={card.cardType === 'business'}
         />

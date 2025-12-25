@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 /*  
    Types
-  */
+*/
 
 type Admin = {
   admin_id: number;
@@ -18,6 +18,7 @@ type AdminAuthState = {
   error: string | null;
 
   sendOtp: (email: string) => Promise<void>;
+  resendOtp: (email: string) => Promise<void>; 
   verifyOtp: (email: string, otp: string) => Promise<void>;
   fetchAdminMe: () => Promise<void>;
   logout: () => void;
@@ -25,7 +26,7 @@ type AdminAuthState = {
 
 /*  
    Cookie helpers (Admin)
-  */
+*/
 
 const ADMIN_TOKEN_COOKIE = 'admin_token';
 
@@ -50,8 +51,8 @@ const clearAdminTokenCookie = () => {
 };
 
 /*  
-   API helpers
-  */
+   API helper
+*/
 
 async function adminApi(body: any) {
   const res = await fetch('/api/auth/admin', {
@@ -67,7 +68,7 @@ async function adminApi(body: any) {
 
 /*  
    Zustand Store
-  */
+*/
 
 export const useAdminAuthStore = create<AdminAuthState>((set, get) => ({
   admin: null,
@@ -78,7 +79,7 @@ export const useAdminAuthStore = create<AdminAuthState>((set, get) => ({
 
   /*  
      SEND OTP
-    */
+  */
   sendOtp: async (email) => {
     set({ loading: true, error: null });
     try {
@@ -94,8 +95,25 @@ export const useAdminAuthStore = create<AdminAuthState>((set, get) => ({
   },
 
   /*  
+     RESEND OTP 
+  */
+  resendOtp: async (email) => {
+    set({ loading: true, error: null });
+    try {
+      await adminApi({
+        action: 'resend-otp',
+        email
+      });
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+      throw error;
+    }
+  },
+
+  /*  
      VERIFY OTP
-    */
+  */
   verifyOtp: async (email, otp) => {
     set({ loading: true, error: null });
     try {
@@ -120,8 +138,8 @@ export const useAdminAuthStore = create<AdminAuthState>((set, get) => ({
   },
 
   /*  
-     FETCH ADMIN (optional future API)
-    */
+     FETCH ADMIN 
+  */
   fetchAdminMe: async () => {
     const token = get().token || getAdminTokenFromCookie();
     if (!token) {
@@ -132,7 +150,7 @@ export const useAdminAuthStore = create<AdminAuthState>((set, get) => ({
     set({ loading: true, error: null });
 
     try {
-    
+      
       set({
         token,
         initialized: true,
@@ -151,7 +169,7 @@ export const useAdminAuthStore = create<AdminAuthState>((set, get) => ({
 
   /*  
      LOGOUT
-    */
+  */
   logout: () => {
     clearAdminTokenCookie();
     set({

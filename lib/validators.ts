@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { CardTemplate, CardType } from '@/types/card';
 
-// ----- Shared helpers -----
+
 // Converts empty strings to undefined so optional fields don’t fail validation.
 const optionalString = () =>
   z.preprocess((val) => (typeof val === 'string' && val.trim() === '' ? undefined : val), z.string().optional());
@@ -34,7 +34,7 @@ const phoneField = z.preprocess(
     .optional()
 );
 
-// ----- Auth schemas -----
+//  Auth schemas 
 export const loginSchema = z.object({
   email: z
     .string()
@@ -63,7 +63,7 @@ export const signupSchema = loginSchema
     path: ['confirmPassword']
   });
 
-// ----- Card schemas -----
+//  Card schemas 
 const servicesSchema = z
   .array(
     z.object({
@@ -93,14 +93,14 @@ export const personalCardSchema = z.object({
   fullName: z.string().min(1, 'Full name is required'),
   email: z.string().email('Please use a valid email'),
   phone: phoneField,
-  role: optionalString(), // backward compat with existing field name
+  role: optionalString(),
   jobTitle: optionalString(),
   company: optionalString(),
-  businessName: optionalString(), // tolerated for shared defaults
-  tagline: optionalString(), // tolerated for shared defaults
+  businessName: optionalString(), 
+  tagline: optionalString(),
   website: optionalUrl(),
   location: optionalString(),
-  address: optionalString(), // backward compat with existing field name
+  address: optionalString(), 
   bio: z
     .string()
     .max(200, 'Keep bio under 200 characters')
@@ -119,10 +119,10 @@ export const personalCardSchema = z.object({
     })
     .partial()
     .optional(),
-  socials: z.any().optional(), // backward compat with existing field name
+  socials: z.any().optional(), 
   profilePhoto: optionalImage(),
-  profileImage: optionalImage(), // backward compat with existing field name
-  logo: optionalImage() // tolerated in defaults
+  profileImage: optionalImage(), 
+  logo: optionalImage() 
 });
 
 // Business card validation
@@ -133,7 +133,7 @@ export const businessCardSchema = z.object({
   fullName: optionalString(),
   email: z.string().email('Please use a valid email'),
   phone: phoneField,
-  role: optionalString(), // backward compat if provided
+  role: optionalString(), 
   company: optionalString(),
   tagline: optionalString(),
   website: optionalUrl(),
@@ -146,18 +146,20 @@ export const businessCardSchema = z.object({
       facebook: optionalUrl(),
       linkedin: optionalUrl(),
       instagram: optionalUrl(),
-      youtube: optionalUrl()
+      youtube: optionalUrl(),
+      github: optionalUrl(),
+      twitter: optionalUrl(),
     })
     .partial()
     .optional(),
   logo: optionalImage(),
-  profileImage: optionalImage() // backward compat
+  profileImage: optionalImage() 
 });
 
-// Discriminated union used both client+server for create
+
 export const cardCreateSchema = z.discriminatedUnion('cardType', [personalCardSchema, businessCardSchema]);
 
-// Update schema: all fields optional; cardType optional string enum (no discriminator to avoid undefined conflicts).
+
 export const cardUpdateSchema = z.object({
   cardType: z.enum(['personal', 'business']).optional(),
   template: templateSchema,
@@ -167,7 +169,7 @@ export const cardUpdateSchema = z.object({
   email: z.string().email('Please use a valid email').optional(),
   phone: phoneField,
   jobTitle: optionalString(),
-  role: optionalString(), // backward compatibility with existing field name
+  role: optionalString(), 
   company: optionalString(),
   tagline: optionalString(),
   website: optionalUrl(),
@@ -187,9 +189,9 @@ export const cardUpdateSchema = z.object({
     })
     .partial()
     .optional(),
-  socials: z.any().optional(), // backward compatibility with existing field name
+  socials: z.any().optional(), 
   profilePhoto: optionalImage(),
-  profileImage: optionalImage(), // backward compatibility
+  profileImage: optionalImage(), 
   logo: optionalImage()
 });
 

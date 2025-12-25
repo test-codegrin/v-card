@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
@@ -11,16 +11,21 @@ export default function AdminLoginPage() {
   const router = useRouter();
   const { showToast } = useToast();
 
-  // Zustand admin auth
-  const { sendOtp, verifyOtp, loading } = useAdminAuthStore();
+  const {
+    sendOtp,
+    verifyOtp,
+    resendOtp,   
+    loading
+  } = useAdminAuthStore();
 
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState<'email' | 'otp'>('email');
 
-  /*  
-     SEND OTP
-    */
+  // Resend OTP timer
+  const [cooldown, setCooldown] = useState(30);
+
+  /*     SEND OTP     */
   const handleSendOtp = async () => {
     if (!email) {
       showToast({
@@ -32,8 +37,9 @@ export default function AdminLoginPage() {
     }
 
     try {
-      await sendOtp(email);  
-      setStep('otp');           
+      await sendOtp(email);
+      setStep('otp');
+      setCooldown(30);
 
       showToast({
         variant: 'success',
@@ -49,9 +55,7 @@ export default function AdminLoginPage() {
     }
   };
 
-  /*  
-     VERIFY OTP
-    */
+  /*     VERIFY OTP     */
   const handleVerifyOtp = async () => {
     if (!otp) {
       showToast({
@@ -63,7 +67,7 @@ export default function AdminLoginPage() {
     }
 
     try {
-      await verifyOtp(email, otp);  
+      await verifyOtp(email, otp);
 
       showToast({
         variant: 'success',
@@ -81,8 +85,39 @@ export default function AdminLoginPage() {
     }
   };
 
+  /*     RESEND OTP     */
+  const handleResendOtp = async () => {
+    try {
+      await resendOtp(email);
+      setCooldown(30);
+
+      showToast({
+        variant: 'success',
+        title: 'OTP resent',
+        message: 'A new verification code has been sent.'
+      });
+    } catch (err: any) {
+      showToast({
+        variant: 'error',
+        title: 'Failed',
+        message: err.message || 'Unable to resend OTP'
+      });
+    }
+  };
+
+  /*     TIMER EFFECT     */
+  useEffect(() => {
+    if (step !== 'otp' || cooldown <= 0) return;
+
+    const timer = setInterval(() => {
+      setCooldown((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [cooldown, step]);
+
   return (
-    <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+    <div className="grid pt-40 gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
       {/* LEFT CONTENT */}
       <div className="space-y-4">
         <p className="text-lg uppercase tracking-widest text-[#9f2b34]">
@@ -114,6 +149,7 @@ export default function AdminLoginPage() {
           </p>
         </div>
 
+        {/* EMAIL STEP */}
         {step === 'email' && (
           <div className="space-y-4">
             <Input
@@ -136,6 +172,7 @@ export default function AdminLoginPage() {
           </div>
         )}
 
+        {/* OTP STEP */}
         {step === 'otp' && (
           <div className="space-y-4">
             <Input
@@ -156,12 +193,28 @@ export default function AdminLoginPage() {
               Verify & Continue
             </Button>
 
-            <button
-              onClick={() => setStep('email')}
-              className="text-sm font-medium text-[#9f2b34] underline underline-offset-4 hover:text-[#7a1f27]"
-            >
-              Change email
-            </button>
+            {/* RESEND + CHANGE EMAIL */}
+            <div className="flex items-center justify-between text-sm">
+              {cooldown > 0 ? (
+                <span className="text-gray-500">
+                  Resend OTP in {cooldown}s
+                </span>
+              ) : (
+                <button
+                  onClick={handleResendOtp}
+                  className="font-medium text-[#9f2b34] underline underline-offset-4 hover:text-[#7a1f27]"
+                >
+                  Resend OTP
+                </button>
+              )}
+
+              <button
+                onClick={() => setStep('email')}
+                className="font-medium text-[#9f2b34] underline underline-offset-4 hover:text-[#7a1f27]"
+              >
+                Change email
+              </button>
+            </div>
           </div>
         )}
       </div>

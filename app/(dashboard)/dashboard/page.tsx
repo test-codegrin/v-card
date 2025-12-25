@@ -68,7 +68,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="">
       {/* HEADER */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
@@ -87,7 +87,7 @@ export default function DashboardPage() {
       </div>
 
       {/* SEARCH & SORT */}
-      <div className="flex flex-wrap items-center gap-3 rounded-2xl border bg-[#9f2b34]/10 p-4 shadow-sm">
+      <div className="flex flex-wrap items-center gap-3 mt-5 rounded-2xl border bg-[#9f2b34]/10 p-4 shadow-sm">
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -121,7 +121,7 @@ export default function DashboardPage() {
         </div>
       ) : (
         /* CARD GRID */
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-5 mt-5 md:grid-cols-2 xl:grid-cols-3">
           {filteredCards.map((card) => (
             <div
               key={card.slug}
@@ -214,7 +214,7 @@ export default function DashboardPage() {
 
       {/* DELETE CONFIRMATION MODAL */}
       {deleteSlug && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div className=" fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
             <h3 className="text-lg font-semibold text-black">Delete Card?</h3>
             <p className="mt-2 text-sm text-gray-600">
