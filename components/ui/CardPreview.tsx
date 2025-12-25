@@ -133,7 +133,7 @@ function ModernTemplate({ card }: { card: Card }) {
       </div>
 
       {/* Content */}
-      <div className="relative space-y-5 px-6 pb-6 pt-4 text-center">
+      <div className="relative space-y-2 px-6 pb-6 pt-4 text-center">
         {/* Name */}
         <h2 className="text-xl font-semibold text-slate-900 tracking-tight">
           {card.cardType === 'business'
@@ -294,7 +294,7 @@ function ClassicTemplate({ card }: { card: Card }) {
         />
       </div>
 
-      <div className="space-y-5 px-6 pb-6 pt-4 text-center">
+      <div className="space-y-2 px-6 pb-6 pt-4 text-center">
         <h2 className="text-xl font-semibold">
           {card.cardType === 'business'
             ? card.businessName || 'Business Name'
@@ -434,7 +434,7 @@ function CreativeTemplate({ card }: { card: Card }) {
       </div>
 
       {/* Content */}
-      <div className="relative space-y-5 px-6 pb-6 pt-4 text-center">
+      <div className="relative space-y-2 px-6 pb-6 pt-4 text-center">
         {/* Name */}
         <h2 className="text-xl font-semibold">
           {card.cardType === 'business'
@@ -443,7 +443,7 @@ function CreativeTemplate({ card }: { card: Card }) {
         </h2>
 
         {/* Role / Tagline / Company */}
-        <div className="space-y-1 text-sm text-gray-600">
+        <div className=" text-sm text-gray-600">
           {card.cardType === 'personal' && card.role && <p>{card.role}</p>}
           {card.company && (
             <p className="font-medium text-[#9f2b34]">{card.company}</p>

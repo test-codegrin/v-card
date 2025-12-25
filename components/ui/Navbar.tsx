@@ -6,40 +6,72 @@ import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import Button from './Button';
 import { useAuthStore } from '@/store/authStore';
+import { useAdminAuthStore } from '@/store/adminAuthStore';
 
-const navLinks = [
+const userNavLinks = [
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/cards/new', label: 'Create' },
   { href: '/share/demo', label: 'Share' }
 ];
 
+const adminNavLinks = [
+  { href: '/admin/dashboard', label: 'Admin Dashboard' }
+];
+
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout, fetchMe, initialized } = useAuthStore();
+
+  // User auth
+  const { user, logout: userLogout, fetchMe, initialized } = useAuthStore();
+
+  // Admin auth
+  const {
+    admin,
+    logout: adminLogout,
+    fetchAdminMe,
+    initialized: adminInitialized
+  } = useAdminAuthStore();
+
   const [mounted, setMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    if (!initialized) fetchMe();
-  }, [fetchMe, initialized]);
 
-  const handleLogout = () => {
-    logout();
+    if (!initialized) fetchMe();
+    if (!adminInitialized) fetchAdminMe();
+  }, [fetchMe, initialized, fetchAdminMe, adminInitialized]);
+
+  const handleUserLogout = () => {
+    userLogout();
     router.push('/login');
   };
 
+  const handleAdminLogout = () => {
+    adminLogout();
+    router.push('/admin/login');
+  };
+
+  const isAdmin = mounted && adminInitialized && !!admin;
+  const isUser = mounted && initialized && !!user;
+
+  const navLinks = isAdmin ? adminNavLinks : userNavLinks;
+
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-black">
-      <div className="container flex items-center justify-between md:px:4 lg:px-12 py-4">
+      <div className="container flex items-center justify-between py-4 md:px-8 lg:px-12">
 
         {/* LOGO */}
         <Link href="/" className="flex items-center gap-3 font-semibold text-white">
-          <img src="/images/PROLIFT-Dark-Apparel-Embroidery-Logo.png" alt="" className='w-[200px]' />
+          <img
+            src="/images/PROLIFT-Dark-Apparel-Embroidery-Logo.png"
+            alt="Logo"
+            className="w-[200px]"
+          />
         </Link>
 
-        {/* DESKTOP + TABLET NAV */}
+        {/* DESKTOP NAV */}
         <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-white/80">
           {navLinks.map((link) => (
             <Link
@@ -57,19 +89,33 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* RIGHT ACTIONS */}
-        <div className="flex items-center gap-2">
-          {mounted && initialized && user ? (
+        {/* DESKTOP ACTIONS */}
+        <div className="hidden md:flex items-center gap-2">
+          {isAdmin ? (
             <>
-              {/* Hide email on tablets */}
-              <div className="hidden lg:flex items-center gap-2 rounded-full border border-white/10 bg-white px-2 py-1 text-xs text-white/80">
+              <div className="hidden lg:flex items-center gap-2 rounded-full border border-white/10 bg-white px-2 py-1 text-xs">
+                <span className="rounded-full bg-red-100 px-2 py-1 text-red-700">
+                  Admin
+                </span>
+                <span className="font-medium text-black">
+                  {admin.admin_name}
+                </span>
+              </div>
+
+              <Button variant="ghost" size="sm" onClick={handleAdminLogout}>
+                Logout
+              </Button>
+            </>
+          ) : isUser ? (
+            <>
+              <div className="hidden lg:flex items-center gap-2 rounded-full border border-white/10 bg-white px-2 py-1 text-xs">
                 <span className="rounded-full bg-primary/20 px-2 py-1 text-primary">
                   {user.name ?? 'User'}
                 </span>
-                <span className="text-black font-medium">{user.email}</span>
+                <span className="font-medium text-black">{user.email}</span>
               </div>
 
-              <Button variant="ghost" size="sm" onClick={handleLogout}>
+              <Button variant="ghost" size="sm" onClick={handleUserLogout}>
                 Logout
               </Button>
 
@@ -77,36 +123,44 @@ export default function Navbar() {
                 variant="primary"
                 size="sm"
                 onClick={() => router.push('/cards/new')}
-                className="hidden sm:inline-flex"
               >
                 New Card
               </Button>
             </>
           ) : (
             <>
-              <Button variant="ghost" size="sm" onClick={() => router.push('/login')}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => router.push('/login')}
+              >
                 Log in
               </Button>
-              <Button variant="primary" size="sm" onClick={() => router.push('/signup')}>
+
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => router.push('/signup')}
+              >
                 Sign up
               </Button>
             </>
           )}
-
-          {/* MOBILE / TABLET MENU BUTTON */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white"
-          >
-            ☰
-          </button>
         </div>
+
+        {/* MOBILE MENU BUTTON */}
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="md:hidden flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white"
+        >
+          ☰
+        </button>
       </div>
 
-      {/* MOBILE / TABLET DROPDOWN */}
+      {/* MOBILE MENU */}
       {menuOpen && (
         <div className="md:hidden border-t border-white/10 bg-secondary/90 backdrop-blur">
-          <div className="flex flex-col gap-1 p-4">
+          <div className="flex flex-col gap-2 p-4">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -123,17 +177,65 @@ export default function Navbar() {
               </Link>
             ))}
 
-            {user && (
+            {isAdmin ? (
               <Button
-                variant="primary"
+                variant="ghost"
                 size="sm"
                 onClick={() => {
                   setMenuOpen(false);
-                  router.push('/cards/new');
+                  handleAdminLogout();
                 }}
               >
-                New Card
+                Logout
               </Button>
+            ) : isUser ? (
+              <>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    router.push('/cards/new');
+                  }}
+                >
+                  New Card
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    handleUserLogout();
+                  }}
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    router.push('/login');
+                  }}
+                >
+                  Log in
+                </Button>
+
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    router.push('/signup');
+                  }}
+                >
+                  Sign up
+                </Button>
+              </>
             )}
           </div>
         </div>
