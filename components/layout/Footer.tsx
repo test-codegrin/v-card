@@ -18,6 +18,9 @@ export default function Footer() {
 
           {/* CENTER — ADDRESS */}
           <div className="space-y-2 text-sm md:text-center">
+            <h4 className="text-base font-semibold tracking-widest text-white uppercase">
+              Address
+            </h4>
             <p className="text-white/80">1840 Pyramid Pl</p>
             <p  className="text-white/80">Memphis, TN 38132</p>
           </div>

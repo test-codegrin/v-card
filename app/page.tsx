@@ -175,7 +175,7 @@ export default function HomePage() {
 
         {/* Text */}
         <div className="space-y-4">
-          <p className="text-[#9f2b34] uppercase tracking-widest">
+          <p className="text-base caption ">
             Contact us
           </p>
           <h2 className="text-4xl font-semibold">

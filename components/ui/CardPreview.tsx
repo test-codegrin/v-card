@@ -52,25 +52,31 @@ function Avatar({
   return (
     <div
       className={clsx(
-        'relative h-40 w-50 overflow-hidden ring-2 ring-primary/30 shadow-card-hover bg-white',
+        'relative h-40 w-40 overflow-hidden ring-2 ring-primary/30 shadow-card-hover',
         shape,
-        !src && 'bg-slate-700 flex items-center justify-center'
+        src ? 'bg-white' : 'bg-slate-700 flex items-center justify-center'
       )}
     >
       {src ? (
         <img
           src={src}
           alt={fallback}
-          className="h-full w-full object-fit object-center"
+          className={clsx(
+            'h-full w-full',
+            square
+              ? 'object-contain p-4' // ✅ FIX for square images
+              : 'object-cover'       // ✅ Perfect for profile photos
+          )}
         />
       ) : (
-        <span className="text-5xl w-40 font-semibold text-black text-center">
+        <span className="text-5xl font-semibold text-white">
           {fallback?.charAt(0)?.toUpperCase() ?? 'V'}
         </span>
       )}
     </div>
   );
 }
+
 
 
 const socialIcons: Record<string, JSX.Element> = {

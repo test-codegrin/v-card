@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button';
 import { useCardStore } from '@/store/cardStore';
 import { useAuthStore } from '@/store/authStore';
 import { formatDate } from '@/lib/utils';
+import SortSelect from '@/components/ui/Select';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -96,20 +97,13 @@ export default function DashboardPage() {
             placeholder:text-gray-400 focus:border-[#9f2b34] focus:outline-none"
         />
 
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value as 'newest' | 'oldest')}
-          className="rounded-xl border border-black/10 bg-white px-3 py-3 text-sm
-            focus:border-[#9f2b34] focus:outline-none"
-        >
-          <option value="newest">Newest first</option>
-          <option value="oldest">Oldest first</option>
-        </select>
+        <SortSelect value={sort} onChange={setSort} />
+
       </div>
 
       {/* EMPTY STATE */}
       {filteredCards.length === 0 ? (
-        <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-black/10 bg-white p-6 mt-5 shadow-sm">
           <h2 className="text-xl font-semibold text-black">No cards yet</h2>
           <p className="mt-1 text-sm text-gray-600">
             Create your first digital card to get started.
