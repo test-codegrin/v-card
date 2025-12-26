@@ -9,6 +9,8 @@ import Input from '@/components/ui/Input';
 import { signupSchema } from '@/lib/validators';
 import { useAuthStore } from '@/store/authStore';
 import { useToast } from '@/components/ui/ToastProvider';
+import { Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
 
 type SignupValues = {
   name: string;
@@ -21,6 +23,8 @@ export default function SignupPage() {
   const router = useRouter();
   const signup = useAuthStore((state) => state.signup);
   const { showToast } = useToast();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const {
     register,
@@ -111,23 +115,55 @@ export default function SignupPage() {
             {...register('email')}
           />
 
-          <Input
-            tone="light"
-            label="Password"
-            type="password"
-            placeholder="Minimum 8 characters"
-            error={errors.password?.message}
-            {...register('password')}
-          />
+          <div className="relative">
+            <Input
+              tone="light"
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Minimum 8 characters"
+              error={errors.password?.message}
+              {...register('password')}
+            />
 
-          <Input
-            tone="light"
-            label="Confirm password"
-            type="password"
-            placeholder="Re-enter password"
-            error={errors.confirmPassword?.message}
-            {...register('confirmPassword')}
-          />
+            <button
+              type="button"
+              title={showPassword ? 'Hide password' : 'Show password'}
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-[12px] bg-primary/20 p-1 rounded-lg hover:text-black transition"
+              tabIndex={-1}
+            >
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+
+          <div className="relative">
+            <Input
+              tone="light"
+              label="Confirm password"
+              type={showConfirmPassword ? 'text' : 'password'}
+              placeholder="Re-enter password"
+              error={errors.confirmPassword?.message}
+              {...register('confirmPassword')}
+            />
+
+            <button
+              type="button"
+              title={showConfirmPassword ? 'Hide password' : 'Show password'}
+              onClick={() => setShowConfirmPassword((v) => !v)}
+              className="absolute right-3 top-[12px] bg-primary/20 p-1 rounded-lg hover:text-black transition"
+              tabIndex={-1}
+            >
+              {showConfirmPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
 
           <Button type="submit" loading={isSubmitting} className="w-full">
             Create account

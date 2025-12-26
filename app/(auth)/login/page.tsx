@@ -9,7 +9,8 @@ import Input from '@/components/ui/Input';
 import { loginSchema } from '@/lib/validators';
 import { useAuthStore } from '@/store/authStore';
 import { useToast } from '@/components/ui/ToastProvider';
-
+import { Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
 type LoginValues = {
   email: string;
   password: string;
@@ -19,6 +20,8 @@ export default function LoginPage() {
   const router = useRouter();
   const login = useAuthStore((state) => state.login);
   const { showToast } = useToast();
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const {
     register,
@@ -100,14 +103,31 @@ export default function LoginPage() {
             {...register('email')}
           />
 
-          <Input
-            tone="light"
-            label="Password"
-            type="password"
-            placeholder="Minimum 8 characters"
-            error={errors.password?.message}
-            {...register('password')}
-          />
+          <div className="relative">
+            <Input
+              tone="light"
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Minimum 8 characters"
+              error={errors.password?.message}
+              {...register('password')}
+            />
+
+            {/* Show / Hide Button */}
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-[12px] bg-primary/20 p-1 rounded-lg  text-black hover:text-black transition"
+              tabIndex={-1}
+            >
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+
 
           <Button
             type="submit"

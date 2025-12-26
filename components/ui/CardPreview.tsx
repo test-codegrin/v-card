@@ -4,7 +4,14 @@ import { Card, CardTemplate } from '@/types/card';
 import { formatDate } from '@/lib/utils';
 import { generateVCard } from '@/lib/vcf'; 
 import clsx from 'clsx';
-
+import {
+  Facebook,
+  Instagram,
+  Linkedin,
+  Github,
+  Youtube,
+  Twitter
+} from 'lucide-react';
 type Props = {
   card: Card;
 };
@@ -64,8 +71,8 @@ function Avatar({
           className={clsx(
             'h-full w-full',
             square
-              ? 'object-contain p-4' // ✅ FIX for square images
-              : 'object-cover'       // ✅ Perfect for profile photos
+              ? 'object-contain p-4' 
+              : 'object-cover'       
           )}
         />
       ) : (
@@ -77,39 +84,13 @@ function Avatar({
   );
 }
 
-
-
 const socialIcons: Record<string, JSX.Element> = {
-  facebook: (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
-      <path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2.1V12h2.1V9.8c0-2.1 1.2-3.3 3.1-3.3.9 0 1.9.1 1.9.1v2.1h-1.1c-1.1 0-1.4.7-1.4 1.4V12h2.4l-.4 2.9h-2v7A10 10 0 0 0 22 12Z" />
-    </svg>
-  ),
-  instagram: (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
-      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm5 5.8A4.2 4.2 0 1 0 16.2 12 4.2 4.2 0 0 0 12 7.8Zm0 6.8A2.6 2.6 0 1 1 14.6 12 2.6 2.6 0 0 1 12 14.6Zm4.5-7.8a1 1 0 1 0 1 1 1 1 0 0 0-1-1Z" />
-    </svg>
-  ),
-  linkedin: (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
-      <path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5a2.5 2.5 0 0 0-.02-5ZM3 9h4v12H3V9Zm7 0h3.8v1.6h.1a4.2 4.2 0 0 1 3.8-2.1c4 0 4.7 2.6 4.7 6v6.5h-4v-5.8c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21h-4V9Z" />
-    </svg>
-  ),
-  github: (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
-      <path d="M12 .5A12 12 0 0 0 0 12.7c0 5.4 3.4 10 8.2 11.6.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.6-1.5-1.4-1.9-1.4-1.9-1.1-.8.1-.8.1-.8 1.2.1 1.8 1.3 1.8 1.3 1.1 1.9 3 1.4 3.7 1.1.1-.8.4-1.4.7-1.7-2.6-.3-5.4-1.3-5.4-5.9 0-1.3.4-2.4 1.2-3.3-.1-.3-.5-1.6.1-3.3 0 0 1-.3 3.3 1.3a11 11 0 0 1 6 0c2.3-1.6 3.3-1.3 3.3-1.3.6 1.7.2 3 .1 3.3.7.9 1.2 2 1.2 3.3 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.3v3.4c0 .3.2.7.8.6A12.3 12.3 0 0 0 24 12.7 12 12 0 0 0 12 .5Z" />
-    </svg>
-  ),
-  youtube: (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
-      <path d="M23.5 6.2s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C17.7 2.7 12 2.7 12 2.7h-.1s-5.7 0-8.6.3c-.4.1-1.3.1-2.1.9-.6.7-.8 2.3-.8 2.3S0 8.1 0 10v2c0 1.9.3 3.8.3 3.8s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9 1.7.2 7.2.3 7.2.3s5.7 0 8.6-.3c.4-.1 1.3-.1 2.1-.9.6-.7.8-2.3.8-2.3s.3-1.9.3-3.8v-2c0-1.9-.3-3.8-.3-3.8ZM9.5 14.7V7.8l6.2 3.5-6.2 3.4Z" />
-    </svg>
-  ),
-  twitter: (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
-      <path d="M23 3a10.9 10.9 0 0 1-3.1.9A5.4 5.4 0 0 0 22.3.4a10.8 10.8 0 0 1-3.4 1.3A5.4 5.4 0 0 0 9.6 6.6 15.3 15.3 0 0 1 1.6 1.1a5.4 5.4 0 0 0 1.7 7.2 5.3 5.3 0 0 1-2.4-.6v.1a5.4 5.4 0 0 0 4.3 5.3 5.4 5.4 0 0 1-2.4.1 5.4 5.4 0 0 0 5 3.7A10.8 10.8 0 0 1 0 19.5a15.2 15.2 0 0 0 8.3 2.4c10 0 15.4-8.3 15.4-15.4v-.7A11 11 0 0 0 23 3Z" />
-    </svg>
-  )
+  facebook: <Facebook className="h-5 w-5" />,
+  instagram: <Instagram className="h-5 w-5" />,
+  linkedin: <Linkedin className="h-5 w-5" />,
+  github: <Github className="h-5 w-5" />,
+  youtube: <Youtube className="h-5 w-5" />,
+  twitter: <Twitter className="h-5 w-5" />
 };
 
  /* MODERN  */
@@ -140,7 +121,7 @@ function ModernTemplate({ card }: { card: Card }) {
       {/* Content */}
       <div className="relative space-y-2 px-6 pb-6 pt-4 text-center">
         {/* Name */}
-        <h2 className="text-xl font-semibold text-slate-900 tracking-tight">
+        <h2 className="text-2xl font-semibold text-slate-900 tracking-tight">
           {card.cardType === 'business'
             ? card.businessName || 'Business Name'
             : card.fullName || 'Full Name'}
@@ -300,7 +281,7 @@ function ClassicTemplate({ card }: { card: Card }) {
       </div>
 
       <div className="space-y-2 px-6 pb-6 pt-4 text-center">
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-2xl font-semibold">
           {card.cardType === 'business'
             ? card.businessName || 'Business Name'
             : card.fullName || 'Full Name'}
@@ -441,7 +422,7 @@ function CreativeTemplate({ card }: { card: Card }) {
       {/* Content */}
       <div className="relative space-y-2 px-6 pb-6 pt-4 text-center">
         {/* Name */}
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-2xl font-semibold">
           {card.cardType === 'business'
             ? card.businessName || 'Business Name'
             : card.fullName || 'Full Name'}

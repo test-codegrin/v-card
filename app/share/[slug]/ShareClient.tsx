@@ -89,7 +89,7 @@ export default function ShareClient({ slug }: Props) {
       </div>
 
       {/* CARD PREVIEW */}
-      <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-black/10 bg-white lg:p-6 md:p-6 shadow-sm">
         <CardPreview card={card} />
       </div>
 
