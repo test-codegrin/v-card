@@ -200,205 +200,331 @@ export default function NewCardPage() {
 
     <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
       {/* FORM */}
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="panel space-y-8 p-6 bg-white"
-      >
-        {/* TYPE + TEMPLATE */}
-        <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
-          <div className="space-y-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-gray-600">
-              Card Type
-            </p>
+     <form
+  onSubmit={handleSubmit(onSubmit)}
+  className="panel space-y-8 p-6 bg-white"
+>
+  {/* ================= TYPE + TEMPLATE ================= */}
+  <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+    {/* CARD TYPE */}
+    <div className="space-y-3">
+      <p className="text-xs font-semibold uppercase tracking-wide text-gray-600">
+        Card Type
+      </p>
 
-            <div className="flex gap-3">
-              {(['personal', 'business'] as const).map((type) => (
-                <button
-                  key={type}
-                  type="button"
-                  className={clsx(
-                    'flex-1 rounded-xl border px-4 py-3 text-sm font-semibold transition',
-                    cardType === type
-                      ? 'border-[#9f2b34] bg-[#9f2b34]/5 text-[#9f2b34]'
-                      : 'border-black/10 bg-white hover:bg-black/5'
-                  )}
-                  onClick={() =>
-                    setValue('cardType', type, {
-                      shouldDirty: true,
-                      shouldValidate: true
-                    })
-                  }
-                >
-                  {type === 'personal' ? 'Personal' : 'Business'}
-                </button>
-              ))}
-            </div>
-            <input type="hidden" {...register('cardType')} />
-          </div>
-
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-gray-600 mb-2">
-              Template
-            </p>
-            <TemplateSelector
-              value={template || 'modern'}
-              onChange={(t) =>
-                setValue('template', t, {
-                  shouldDirty: true,
-                  shouldValidate: true
-                })
-              }
-            />
-          </div>
-        </div>
-
-        {/* BASIC DETAILS */}
-        <div className="grid gap-4 lg:grid-cols-2">
-          {cardType === 'personal' ? (
-            <>
-              <Input tone="light" label="Full Name" {...register('fullName')} />
-              <Input tone="light" label="Job Title" {...register('role')} />
-              <Input tone="light" label="Company" {...register('company')} />
-            </>
-          ) : (
-            <>
-              <Input tone="light" label="Business Name" {...register('businessName')} />
-              <Input tone="light" label="Tagline" {...register('tagline')} />
-            </>
-          )}
-
-          <Input tone="light" label="Email" {...register('email')} />
-          <Input tone="light" label="Phone" {...register('phone')} />
-          <Input tone="light" label="Website" {...register('website')} />
-          <Input tone="light" label="Address" {...register('address')} />
-
-          <TextArea
-            tone="light"
-            label={cardType === 'business' ? 'About / Description' : 'Bio'}
-            rows={3}
-            {...register('bio')}
-          />
-        </div>
-
-        {/* SOCIAL LINKS */}
-        <div className="space-y-4">
-          <p className="text-sm font-semibold text-gray-700">Social Links</p>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <Input tone="light" label="LinkedIn" {...register('social.linkedin')} />
-            <Input tone="light" label="Instagram" {...register('social.instagram')} />
-            <Input tone="light" label="YouTube" {...register('social.youtube')} />
-            <Input tone="light" label="Twitter" {...register('social.twitter')} />
-            <Input tone="light" label="GitHub" {...register('social.github')} />
-            {cardType === 'business' && (
-              <Input tone="light" label="Facebook" {...register('social.facebook')} />
+      <div className="flex gap-3">
+        {(['personal', 'business'] as const).map((type) => (
+          <button
+            key={type}
+            type="button"
+            className={clsx(
+              'flex-1 rounded-xl border px-4 py-3 text-sm font-semibold transition',
+              cardType === type
+                ? 'border-[#9f2b34] bg-[#9f2b34]/5 text-[#9f2b34]'
+                : 'border-black/10 bg-white hover:bg-black/5'
             )}
-          </div>
+            onClick={() =>
+              setValue('cardType', type, {
+                shouldDirty: true,
+                shouldValidate: true
+              })
+            }
+          >
+            {type === 'personal' ? 'Personal' : 'Business'}
+          </button>
+        ))}
+      </div>
+
+      <input type="hidden" {...register('cardType')} />
+
+      {errors.cardType && (
+        <p className="text-xs text-red-500">{errors.cardType.message}</p>
+      )}
+    </div>
+
+    {/* TEMPLATE */}
+    <div>
+      <p className="text-xs font-semibold uppercase tracking-wide text-gray-600 mb-2">
+        Template
+      </p>
+
+      <TemplateSelector
+        value={template || 'modern'}
+        onChange={(t) =>
+          setValue('template', t, {
+            shouldDirty: true,
+            shouldValidate: true
+          })
+        }
+      />
+
+      {errors.template && (
+        <p className="mt-1 text-xs text-red-500">{errors.template.message}</p>
+      )}
+    </div>
+  </div>
+
+  {/* ================= BASIC DETAILS ================= */}
+  <div className="grid gap-4 lg:grid-cols-2">
+    {cardType === 'personal' ? (
+      <>
+        <Input
+          tone="light"
+          label="Full Name"
+          {...register('fullName')}
+          error={errors.fullName?.message}
+        />
+
+        <Input
+          tone="light"
+          label="Job Title"
+          {...register('role')}
+          error={errors.role?.message}
+        />
+
+        <Input
+          tone="light"
+          label="Company"
+          {...register('company')}
+          error={errors.company?.message}
+        />
+      </>
+    ) : (
+      <>
+        <Input
+          tone="light"
+          label="Business Name"
+          {...register('businessName')}
+          error={errors.businessName?.message}
+        />
+
+        <Input
+          tone="light"
+          label="Tagline"
+          {...register('tagline')}
+          error={errors.tagline?.message}
+        />
+      </>
+    )}
+
+    <Input
+      tone="light"
+      label="Email"
+      {...register('email')}
+      error={errors.email?.message}
+    />
+
+    <Input
+      tone="light"
+      label="Phone"
+      {...register('phone')}
+      error={errors.phone?.message}
+    />
+
+    <Input
+      tone="light"
+      label="Website"
+      {...register('website')}
+      error={errors.website?.message}
+    />
+
+    <Input
+      tone="light"
+      label="Address"
+      {...register('address')}
+      error={errors.address?.message}
+    />
+
+    <TextArea
+      tone="light"
+      label={cardType === 'business' ? 'About / Description' : 'Bio'}
+      rows={3}
+      {...register('bio')}
+      error={errors.bio?.message}
+    />
+  </div>
+
+  {/* ================= SOCIAL LINKS ================= */}
+  <div className="space-y-4">
+    <p className="text-sm font-semibold text-gray-700">Social Links</p>
+
+    <div className="grid gap-4 md:grid-cols-2">
+      <Input
+        tone="light"
+        label="LinkedIn"
+        {...register('social.linkedin')}
+        error={errors.social?.linkedin?.message}
+      />
+
+      <Input
+        tone="light"
+        label="Instagram"
+        {...register('social.instagram')}
+        error={errors.social?.instagram?.message}
+      />
+
+      <Input
+        tone="light"
+        label="YouTube"
+        {...register('social.youtube')}
+        error={errors.social?.youtube?.message}
+      />
+
+      <Input
+        tone="light"
+        label="Twitter"
+        {...register('social.twitter')}
+        error={errors.social?.twitter?.message}
+      />
+
+      <Input
+        tone="light"
+        label="GitHub"
+        {...register('social.github')}
+        error={errors.social?.github?.message}
+      />
+
+      {cardType === 'business' && (
+        <Input
+          tone="light"
+          label="Facebook"
+          {...register('social.facebook')}
+          error={errors.social?.facebook?.message}
+        />
+      )}
+    </div>
+  </div>
+
+  {/* ================= SERVICES ================= */}
+  {cardType === 'business' && (
+    <div className="space-y-4 rounded-xl border border-black/10 bg-black/5 p-4">
+      <div className="flex justify-between">
+        <div>
+          <p className="font-semibold">Services</p>
+          <p className="text-xs text-gray-600">What you offer</p>
         </div>
+        <Button
+          type="button"
+          size="sm"
+          variant="ghost"
+          onClick={() => appendService({ name: '', description: '' })}
+        >
+          Add
+        </Button>
+      </div>
 
-        {/* SERVICES */}
-        {cardType === 'business' && (
-          <div className="space-y-4 rounded-xl border border-black/10 bg-black/5 p-4">
-            <div className="flex justify-between">
-              <div>
-                <p className="font-semibold">Services</p>
-                <p className="text-xs text-gray-600">What you offer</p>
-              </div>
-              <Button
-                type="button"
-                size="sm"
-                variant="ghost"
-                onClick={() => appendService({ name: '', description: '' })}
-              >
-                Add
-              </Button>
-            </div>
-
-            {serviceFields.map((field, i) => (
-              <div
-                key={field.id}
-                className="grid gap-3 rounded-xl border border-black/10 bg-white p-3 sm:grid-cols-2"
-              >
-                <Input tone="light" label="Service Name" {...register(`services.${i}.name`)} />
-                <Input tone="light" label="Description" {...register(`services.${i}.description`)} />
-
-                <div className="sm:col-span-2 flex justify-end">
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => removeService(i)}
-                  >
-                    Remove
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* PRODUCTS */}
-        {cardType === 'business' && (
-          <div className="space-y-4 rounded-xl border border-black/10 bg-black/5 p-4">
-            <div className="flex justify-between">
-              <div>
-                <p className="font-semibold">Products</p>
-                <p className="text-xs text-gray-600">Key offerings</p>
-              </div>
-              <Button
-                type="button"
-                size="sm"
-                variant="ghost"
-                onClick={() => appendProduct({ name: '', link: '' })}
-              >
-                Add
-              </Button>
-            </div>
-
-            {productFields.map((field, i) => (
-              <div
-                key={field.id}
-                className="grid gap-3 rounded-xl border border-black/10 bg-white p-3 sm:grid-cols-2"
-              >
-                <Input tone="light" label="Product Name" {...register(`products.${i}.name`)} />
-                <Input tone="light" label="Product Link" {...register(`products.${i}.link`)} />
-
-                <div className="sm:col-span-2 flex justify-end">
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => removeProduct(i)}
-                  >
-                    Remove
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* IMAGE UPLOAD */}
-        <div className="rounded-xl border border-black/10 bg-black/5 p-4">
-          <label className="font-semibold">
-            {cardType === 'business' ? 'Logo Upload' : 'Profile Image'}
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="mt-2 w-full rounded-xl border border-black/10 bg-white px-4 py-3"
+      {serviceFields.map((field, i) => (
+        <div
+          key={field.id}
+          className="grid gap-3 rounded-xl border border-black/10 bg-white p-3 sm:grid-cols-2"
+        >
+          <Input
+            tone="light"
+            label="Service Name"
+            {...register(`services.${i}.name`)}
+            error={errors.services?.[i]?.name?.message}
           />
-          {uploadError && <p className="text-xs text-red-500">{uploadError}</p>}
-        </div>
 
-        {/* SAVE */}
-        <div className="flex justify-end">
-          <Button type="submit" loading={isSubmitting}>
-            Save Card
-          </Button>
+          <Input
+            tone="light"
+            label="Description"
+            {...register(`services.${i}.description`)}
+            error={errors.services?.[i]?.description?.message}
+          />
+
+          <div className="sm:col-span-2 flex justify-end">
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              onClick={() => removeService(i)}
+            >
+              Remove
+            </Button>
+          </div>
         </div>
-      </form>
+      ))}
+    </div>
+  )}
+
+  {/* ================= PRODUCTS ================= */}
+  {cardType === 'business' && (
+    <div className="space-y-4 rounded-xl border border-black/10 bg-black/5 p-4">
+      <div className="flex justify-between">
+        <div>
+          <p className="font-semibold">Products</p>
+          <p className="text-xs text-gray-600">Key offerings</p>
+        </div>
+        <Button
+          type="button"
+          size="sm"
+          variant="ghost"
+          onClick={() => appendProduct({ name: '', link: '' })}
+        >
+          Add
+        </Button>
+      </div>
+
+      {productFields.map((field, i) => (
+        <div
+          key={field.id}
+          className="grid gap-3 rounded-xl border border-black/10 bg-white p-3 sm:grid-cols-2"
+        >
+          <Input
+            tone="light"
+            label="Product Name"
+            {...register(`products.${i}.name`)}
+            error={errors.products?.[i]?.name?.message}
+          />
+
+          <Input
+            tone="light"
+            label="Product Link"
+            {...register(`products.${i}.link`)}
+            error={errors.products?.[i]?.link?.message}
+          />
+
+          <div className="sm:col-span-2 flex justify-end">
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              onClick={() => removeProduct(i)}
+            >
+              Remove
+            </Button>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {/* ================= IMAGE UPLOAD ================= */}
+  <div className="rounded-xl border border-black/10 bg-black/5 p-4">
+    <label className="font-semibold">
+      {cardType === 'business' ? 'Logo Upload' : 'Profile Image'}
+    </label>
+
+    <input
+      type="file"
+      accept="image/*"
+      onChange={handleFileChange}
+      className="mt-2 w-full rounded-xl border border-black/10 bg-white px-4 py-3"
+    />
+
+    {uploadError && (
+      <p className="mt-1 text-xs font-medium text-red-500">{uploadError}</p>
+    )}
+  </div>
+
+  {/* ================= SAVE ================= */}
+  <div className="flex justify-end">
+    <Button type="submit" loading={isSubmitting}>
+      Save Card
+    </Button>
+  </div>
+</form>
+
 
       {/* PREVIEW */}
       <div className="glass p-6 bg-white">
