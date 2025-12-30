@@ -7,7 +7,22 @@ const optionalString = () =>
   z.preprocess((val) => (typeof val === 'string' && val.trim() === '' ? undefined : val), z.string().optional());
 
 const optionalUrl = () =>
-  z.preprocess((val) => (typeof val === 'string' && val.trim() === '' ? undefined : val), z.string().url('Invalid URL').optional());
+  z
+    .string()
+    .trim()
+    .optional()
+    .transform((val) => {
+      if (!val) return undefined;
+      if (/^https?:\/\//i.test(val)) return val;
+      return `https://${val}`;
+    })
+    .refine(
+      (val) =>
+        val === undefined || /^https?:\/\/.+\..+/i.test(val),
+      {
+        message: 'Invalid URL'
+      }
+    );
 
 // Allow either URL or data URL for images.
 const optionalImage = () =>
