@@ -61,7 +61,7 @@ function Avatar({
       className={clsx(
         'relative h-40 w-40 overflow-hidden ring-2 ring-primary/30 shadow-card-hover',
         shape,
-        src ? 'bg-white' : 'bg-slate-700 flex items-center justify-center'
+        src ? 'bg-slate-700' : 'bg-slate-700 flex items-center justify-center'
       )}
     >
       {src ? (
