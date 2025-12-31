@@ -176,11 +176,15 @@ export default function AdminDashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#9f2b34]/20 border-t-[#9f2b34] rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading dashboard...</p>
-        </div>
+       <div className="flex min-h-[70vh] flex-col items-center justify-center gap-3">
+        {/* spinner */}
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#9f2b34]/30 border-t-[#9f2b34]" />
+
+        <p className="text-sm font-medium text-[#9f2b34]">
+          Loading Dashboard..
+        </p>
+
+      
       </div>
     );
   }
@@ -315,7 +319,16 @@ export default function AdminDashboardPage() {
               <div className="flex items-center justify-center py-12">
                 <div className="text-center">
                   <div className="w-12 h-12 border-3 border-[#9f2b34]/20 border-t-[#9f2b34] rounded-full animate-spin mx-auto mb-4"></div>
-                  <p className="text-gray-600">Loading cards...</p>
+                   <div className="flex min-h-[70vh] flex-col items-center justify-center gap-3">
+        {/* spinner */}
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#9f2b34]/30 border-t-[#9f2b34]" />
+
+        <p className="text-sm font-medium text-[#9f2b34]">
+          Loading Cards…
+        </p>
+
+        
+      </div>
                 </div>
               </div>
             ) : userCards.length === 0 ? (

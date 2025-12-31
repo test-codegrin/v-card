@@ -65,7 +65,16 @@ export default function DashboardPage() {
   };
 
   if (loading && cards.length === 0) {
-    return <div className="text-gray-600">Loading your cards…</div>;
+    return  <div className="flex min-h-[70vh] flex-col items-center justify-center gap-3">
+        {/* spinner */}
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#9f2b34]/30 border-t-[#9f2b34]" />
+
+        <p className="text-sm font-medium text-[#9f2b34]">
+          Loading your cards..
+        </p>
+
+    
+      </div>
   }
 
   return (

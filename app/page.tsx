@@ -144,7 +144,7 @@ export default function HomePage() {
 
         <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-black/10 shadow-[0_25px_60px_-20px_rgba(159,43,52,0.35)]">
           <video
-            src="/video/v-card-video.mp4"
+            src="/video/prolift-demo.mp4"
             controls
             muted
             playsInline
