@@ -11,7 +11,6 @@ import { useAdminAuthStore } from '@/store/adminAuthStore';
 const userNavLinks = [
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/cards/new', label: 'Create' },
-  { href: '/share/demo', label: 'Share' }
 ];
 
 const adminNavLinks = [

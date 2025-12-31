@@ -25,6 +25,8 @@ export default function CardDetailPage() {
   const [copied, setCopied] = useState(false);
   const [card, setCard] = useState<Card | null>(null);
   const qrContainerRef = useRef<HTMLDivElement | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
 
   useEffect(() => {
     if (!params?.slug) return;
@@ -89,12 +91,10 @@ export default function CardDetailPage() {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm('Delete this card? This action cannot be undone.')) {
-      return;
-    }
     await deleteCard(card.slug);
     router.replace('/dashboard');
   };
+
 
   /* - QR COLOR  */
   const qrColor =
@@ -142,11 +142,12 @@ export default function CardDetailPage() {
             variant="ghost"
             onClick={(e) => {
               e.stopPropagation();
-              handleDelete();
+              setShowDeleteConfirm(true);
             }}
           >
             Delete
           </Button>
+
         </div>
       </div>
 
@@ -199,6 +200,42 @@ export default function CardDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* DELETE CONFIRM MODAL */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+            <h2 className="text-xl font-semibold text-black">
+              Delete Card?
+            </h2>
+
+            <p className="mt-2 text-sm text-gray-600">
+              This action cannot be undone. The card and its share link will be permanently removed.
+            </p>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <Button
+                variant="ghost"
+                onClick={() => setShowDeleteConfirm(false)}
+              >
+                Cancel
+              </Button>
+
+              <Button
+                variant="primary"
+                onClick={() => {
+                  setShowDeleteConfirm(false);
+                  handleDelete();
+                }}
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
+
   );
 }

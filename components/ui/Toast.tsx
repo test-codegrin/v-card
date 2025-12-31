@@ -30,6 +30,7 @@ export function Toast({
   return (
     <div
       className={clsx(
+        'hidden sm:block',
         'relative rounded-xl border px-4 py-3',
         'shadow-lg',
         variantStyles[variant]

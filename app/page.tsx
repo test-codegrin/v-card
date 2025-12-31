@@ -52,11 +52,13 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-wrap gap-3">
-            <Link href={primaryCta}>
-              <Button variant="primary" size="md">
-                {isAuthenticated ? 'Go to dashboard' : 'Start free'}
-              </Button>
-            </Link>
+            {isAuthenticated && (
+              <Link href={primaryCta}>
+                <Button variant="primary" size="md">
+                  Go to dashboard
+                </Button>
+              </Link>
+            )}
 
             <Link href={secondaryCta}>
               <Button variant="primary" size="md">
@@ -154,9 +156,9 @@ export default function HomePage() {
       </section>
 
       {/*    CONTACT US    */}
-      <section className="lg:flex justify-between gap-14 items-center">
-        {/* Desktop form */}
-        <form
+      {/* <section className="lg:flex justify-between gap-14 items-center"> */}
+      {/* Desktop form */}
+      {/* <form
           onSubmit={handleSubmit}
           className="lg:block hidden w-[880px] rounded-2xl border border-black/10 bg-white p-8 shadow-[0_25px_60px_-20px_rgba(159,43,52,0.35)] space-y-4"
         >
@@ -171,9 +173,9 @@ export default function HomePage() {
           <Button variant="primary" className="w-full">
             Send Message
           </Button>
-        </form>
+        </form> */}
 
-        {/* Text */}
+      {/* Text
         <div className="space-y-4">
           <p className="text-base caption ">
             Contact us
@@ -185,10 +187,10 @@ export default function HomePage() {
             Have a question, feature request, or partnership idea?
             Drop us a message and we’ll get back to you shortly.
           </p>
-        </div>
+        </div> */}
 
-        {/* Mobile form */}
-        <form
+      {/* Mobile form */}
+      {/* <form
           onSubmit={handleSubmit}
           className="lg:hidden block mt-5 rounded-2xl border border-black/10 bg-white p-8 shadow-[0_25px_60px_-20px_rgba(159,43,52,0.35)] space-y-4"
         >
@@ -203,8 +205,9 @@ export default function HomePage() {
           <Button variant="primary" className="w-full">
             Send Message
           </Button>
-        </form>
-      </section>
+        </form> */}
+      {/* </section> */}
+
     </div>
   );
 }
