@@ -14,6 +14,7 @@ import { cardCreateSchema, CardFormValues } from '@/lib/validators';
 import { useCardStore } from '@/store/cardStore';
 import { useAuthStore } from '@/store/authStore';
 import { useToast } from '@/components/ui/ToastProvider';
+import { uploadImageToImageKit } from '@/lib/api';
 
 const defaultValues: CardFormValues = {
   cardType: 'personal',
@@ -152,37 +153,107 @@ export default function NewCardPage() {
     return `https://${url}`;
   };
 
-  const onSubmit = async (formValues: CardFormValues) => {
-    try {
-      if (!authUser?.email) {
+  // Update the onSubmit function
+const onSubmit = async (formValues: CardFormValues) => {
+  try {
+    if (!authUser?.email) {
+      showToast({
+        variant: 'error',
+        title: 'Not signed in',
+        message: 'Please log in to save your card.'
+      });
+      return;
+    }
+
+    let profileImageUrl = formValues.profileImage;
+    let logoUrl = formValues.logo;
+
+    // Get token from auth store
+    const token = useAuthStore.getState().token;
+    if (!token) {
+      showToast({
+        variant: 'error',
+        title: 'Authentication error',
+        message: 'No valid token found'
+      });
+      return;
+    }
+
+    // Upload profile image if it's a base64 string
+    if (formValues.profileImage && formValues.profileImage.startsWith('data:')) {
+      showToast({
+        variant: 'info',
+        title: 'Uploading',
+        message: 'Uploading profile image...'
+      });
+
+      try {
+        const uploadResult = await uploadImageToImageKit(token, {
+          file: formValues.profileImage,
+          fileName: `profile-${Date.now()}.jpg`,
+          folder: '/v-card'
+        });
+        profileImageUrl = uploadResult.url;
+      } catch (error: any) {
         showToast({
           variant: 'error',
-          title: 'Not signed in',
-          message: 'Please log in to save your card.'
+          title: 'Upload failed',
+          message: `Profile image upload failed: ${error.message}`
         });
         return;
       }
-      const card = await createCard({
-        ownerEmail: authUser.email,
-        ...formValues,
-        website: normalizeWebsite(formValues.website),
-        template: formValues.template || 'modern'
-      });
-
-
-
-
-      await fetchCards();
-      showToast({ variant: 'success', title: 'Saved', message: 'Your card has been saved.' });
-      router.replace(`/cards/${card.slug}`);
-    } catch (error: any) {
-      showToast({
-        variant: 'error',
-        title: 'Save failed',
-        message: error?.message || 'Could not save card.'
-      });
     }
-  };
+
+    // Upload logo if it's a base64 string
+    if (formValues.logo && formValues.logo.startsWith('data:')) {
+      showToast({
+        variant: 'info',
+        title: 'Uploading',
+        message: 'Uploading logo...'
+      });
+
+      try {
+        const uploadResult = await uploadImageToImageKit(token, {
+          file: formValues.logo,
+          fileName: `logo-${Date.now()}.jpg`,
+          folder: '/v-card'
+        });
+        logoUrl = uploadResult.url;
+      } catch (error: any) {
+        showToast({
+          variant: 'error',
+          title: 'Upload failed',
+          message: `Logo upload failed: ${error.message}`
+        });
+        return;
+      }
+    }
+
+    // Create card with ImageKit URLs
+    const card = await createCard({
+      ownerEmail: authUser.email,
+      ...formValues,
+      profileImage: profileImageUrl,
+      logo: logoUrl,
+      website: normalizeWebsite(formValues.website),
+      template: formValues.template || 'modern'
+    });
+
+    await fetchCards();
+    showToast({
+      variant: 'success',
+      title: 'Saved',
+      message: 'Your card has been saved successfully.'
+    });
+    router.replace(`/cards/${card.slug}`);
+  } catch (error: any) {
+    showToast({
+      variant: 'error',
+      title: 'Save failed',
+      message: error?.message || 'Could not save card.'
+    });
+  }
+};
 
   return (
     <div className="space-y-10">

@@ -63,3 +63,13 @@ export async function updateCard(slug: string, token: string, payload: Partial<C
 export async function deleteCard(slug: string, token: string) {
   return apiFetch<{ success: boolean }>(`/api/cards/${slug}`, { method: 'DELETE', token });
 }
+
+export async function uploadImageToImageKit(
+  token: string,
+  payload: { file: string; fileName: string; folder?: string }
+) {
+  return apiFetch<{ url: string; fileId: string; filePath: string; name: string }>(
+    '/api/upload-image',
+    { method: 'POST', token, body: payload }
+  );
+}
