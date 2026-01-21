@@ -128,7 +128,6 @@ export default function LoginPage() {
             </button>
           </div>
 
-
           <Button
             type="submit"
             loading={isSubmitting}
@@ -139,16 +138,27 @@ export default function LoginPage() {
           </Button>
         </form>
 
-        <p className="mt-4 text-sm text-gray-600">
-          Don&apos;t have an account?{' '}
+        <div className="flex spacex-2 items-center justify-between mt-4">
           <Link
-            className="font-semibold text-[#9f2b34] underline underline-offset-4 hover:text-[#7a1f27]"
-            href="/signup"
+            href="/forgot-password"
+            className="text-sm font-medium text-[#9f2b34] hover:underline"
           >
-            Sign up
+            Forgot password?
           </Link>
-        </p>
+
+          <div className="text-right">
+            <p className="text-sm text-gray-600">
+              Don&apos;t have an account?{' '}
+              <Link
+                className="font-semibold text-[#9f2b34] hover:text-[#7a1f27] hover:underline"
+                href="/signup"
+              >
+                Sign up
+              </Link>
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
+    </div >
   );
 }
