@@ -461,14 +461,7 @@ const onSubmit = async (formValues: CardFormValues) => {
                 error={errors.social?.facebook?.message}
               />
 
-              {cardType === 'business' && (
-                <Input
-                  tone="light"
-                  label="Facebook"
-                  {...register('social.facebook')}
-                  error={errors.social?.facebook?.message}
-                />
-              )}
+
             </div>
           </div>
 
