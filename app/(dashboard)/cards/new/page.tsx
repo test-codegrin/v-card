@@ -35,9 +35,8 @@ const defaultValues: CardFormValues = {
     linkedin: '',
     instagram: '',
     youtube: '',
-    github: '',
+    facebook: '',
     twitter: '',
-    facebook: ''
   },
   profileImage: '',
   logo: ''
@@ -119,7 +118,6 @@ export default function NewCardPage() {
       setValue('social.linkedin', socials.linkedin || '');
       setValue('social.instagram', socials.instagram || '');
       setValue('social.youtube', socials.youtube || '');
-      setValue('social.github', socials.github || '');
       setValue('social.twitter', socials.twitter || '');
       setValue('social.facebook', socials.facebook || '');
     })();
@@ -458,9 +456,9 @@ const onSubmit = async (formValues: CardFormValues) => {
 
               <Input
                 tone="light"
-                label="GitHub"
-                {...register('social.github')}
-                error={errors.social?.github?.message}
+                label="FACEBOOK"
+                {...register('social.facebook')}
+                error={errors.social?.facebook?.message}
               />
 
               {cardType === 'business' && (
